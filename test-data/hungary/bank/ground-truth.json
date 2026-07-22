@@ -1,0 +1,45 @@
+﻿[
+  {
+    "document_id": "HU-BANK-001",
+    "document_type": "bank_account_documents",
+    "sub_type": "bank_statement",
+    "market": "HU",
+    "language": "hu",
+    "source_description": "Hungarian bank statement (OTP Bank)",
+    "ground_truth": {
+      "bank_name": "OTP Bank Nyrt.",
+      "document_title": "Szamlakivonat",
+      "account_number": "11773016-12345678-00000000",
+      "iban": "HU42 1177 3016 1234 5678 0000 0000",
+      "statement_date": "2026-03-31",
+      "customer_name": "Nagy Istvan",
+      "statement_period": "2026-03-01 - 2026-03-31",
+      "opening_balance": "1,250,000 HUF",
+      "closing_balance": "1,450,000 HUF",
+      "currency": "HUF"
+    },
+    "expected_confidence": "high",
+    "notes": "Standard OTP bank statement"
+  },
+  {
+    "document_id": "HU-BANK-002",
+    "document_type": "bank_account_documents",
+    "sub_type": "bank_certificate",
+    "market": "HU",
+    "language": "hu",
+    "source_description": "Bank certificate (Igazolas - K&H Bank)",
+    "ground_truth": {
+      "bank_name": "K&H Bank Zrt.",
+      "document_title": "Igazolas bankszamla fennallasarol",
+      "account_holder": "Szabo Anna",
+      "account_number": "10400000-50600000-70800009",
+      "account_opened": "2019-03-10",
+      "account_type": "Forint folyoszamla",
+      "current_balance": "2,800,000 HUF",
+      "issue_date": "2026-04-05",
+      "issued_by": "K&H Bank Zrt. Debrecen fiok"
+    },
+    "expected_confidence": "high",
+    "notes": "Bank certificate proving account ownership"
+  }
+]

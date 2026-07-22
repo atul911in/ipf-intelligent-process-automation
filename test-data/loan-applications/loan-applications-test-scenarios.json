@@ -1,0 +1,375 @@
+﻿[
+  {
+    "application_id": "APP-PL-GOOD-001",
+    "scenario": "CLEAN - All consistent",
+    "market": "PL",
+    "expected_result": "No discrepancies - should APPROVE",
+    "loan_application": {
+      "applicant_full_name": "Jan Kowalski",
+      "date_of_birth": "1985-01-02",
+      "residential_address": "ul. Marszalkowska 10 m. 5, 00-001 Warszawa",
+      "declared_net_monthly_income": "6120.00",
+      "declared_income_currency": "PLN",
+      "requested_loan_amount": "5000.00",
+      "loan_term_weeks": "52",
+      "employment_status": "Employed",
+      "employer_name": "ABC Polska Sp. z o.o.",
+      "bank_account_number": "PL11 1020 1026 0000 0422 7020 1234",
+      "purpose_of_loan": "Remont mieszkania",
+      "phone_number": "+48 600 123 456",
+      "email_address": "jan.kowalski@email.pl"
+    },
+    "supporting_documents": {
+      "identity_card": {
+        "first_name": "Jan",
+        "last_name": "Kowalski",
+        "pesel": "85010212345",
+        "document_number": "ABS123456",
+        "date_of_birth": "1985-01-02",
+        "expiry_date": "2030-03-15",
+        "issuing_authority": "Prezydent m.st. Warszawy"
+      },
+      "utility_bill": {
+        "provider_name": "PGE Polska Grupa Energetyczna S.A.",
+        "customer_name": "Jan Kowalski",
+        "customer_address": "ul. Marszalkowska 10 m. 5, 00-001 Warszawa",
+        "invoice_date": "2026-03-15",
+        "amount_due": "245.67 PLN"
+      },
+      "payslip": {
+        "employer_name": "ABC Polska Sp. z o.o.",
+        "employee_name": "Jan Kowalski",
+        "pay_period": "03/2026",
+        "gross_salary": "8500.00 PLN",
+        "net_salary": "6120.00 PLN",
+        "employee_pesel": "85010212345"
+      },
+      "bank_statement": {
+        "bank_name": "PKO Bank Polski S.A.",
+        "customer_name": "Jan Kowalski",
+        "account_number": "PL11 1020 1026 0000 0422 7020 1234",
+        "closing_balance": "14230.50 PLN"
+      }
+    },
+    "conflicts": []
+  },
+  {
+    "application_id": "APP-RO-GOOD-001",
+    "scenario": "CLEAN - All consistent",
+    "market": "RO",
+    "expected_result": "No discrepancies - should APPROVE",
+    "loan_application": {
+      "applicant_full_name": "Alexandru Popescu",
+      "date_of_birth": "1985-03-15",
+      "residential_address": "Str. Victoriei Nr. 25, Bl. A1, Sc. 2, Et. 3, Ap. 15, Sector 1, Bucuresti",
+      "declared_net_monthly_income": "5820.00",
+      "declared_income_currency": "RON",
+      "requested_loan_amount": "4000.00",
+      "loan_term_weeks": "52",
+      "employment_status": "Angajat permanent",
+      "employer_name": "Tech Solutions Romania S.R.L.",
+      "bank_account_number": "RO49 BTRL 0130 1202 1234 5678",
+      "purpose_of_loan": "Achizitie electrocasnice",
+      "phone_number": "+40 721 234 567",
+      "email_address": "a.popescu@email.ro"
+    },
+    "supporting_documents": {
+      "identity_card": {
+        "first_name": "Alexandru",
+        "last_name": "Popescu",
+        "cnp": "1850315400123",
+        "document_series": "RD",
+        "document_number": "123456789",
+        "date_of_birth": "1985-03-15",
+        "expiry_date": "2031-06-10",
+        "address": "Str. Victoriei Nr. 25, Bl. A1, Sc. 2, Et. 3, Ap. 15, Sector 1, Bucuresti"
+      },
+      "utility_bill": {
+        "provider_name": "Enel Energie S.A.",
+        "customer_name": "Alexandru Popescu",
+        "customer_address": "Str. Victoriei Nr. 25, Bl. A1, Sc. 2, Et. 3, Ap. 15, Sector 1, Bucuresti",
+        "invoice_date": "2026-03-20",
+        "amount_due": "320.50 RON"
+      },
+      "payslip": {
+        "employer_name": "Tech Solutions Romania S.R.L.",
+        "employee_name": "Alexandru Popescu",
+        "pay_period": "03/2026",
+        "gross_salary": "9500.00 RON",
+        "net_salary": "5820.00 RON",
+        "employee_cnp": "1850315400123"
+      },
+      "bank_statement": {
+        "bank_name": "Banca Transilvania S.A.",
+        "customer_name": "Alexandru Popescu",
+        "iban": "RO49 BTRL 0130 1202 1234 5678",
+        "closing_balance": "10230.45 RON"
+      }
+    },
+    "conflicts": []
+  },
+  {
+    "application_id": "APP-HU-GOOD-001",
+    "scenario": "CLEAN - All consistent",
+    "market": "HU",
+    "expected_result": "No discrepancies - should APPROVE",
+    "loan_application": {
+      "applicant_full_name": "Nagy Istvan",
+      "date_of_birth": "1985-01-02",
+      "residential_address": "1051 Budapest, Vorosmarty ter 5. 3. em. 12.",
+      "declared_net_monthly_income": "565000.00",
+      "declared_income_currency": "HUF",
+      "requested_loan_amount": "1500000.00",
+      "loan_term_weeks": "52",
+      "employment_status": "Hatarozatlan ideju munkaviszony",
+      "employer_name": "ABC Informatika Kft.",
+      "bank_account_number": "11773016-12345678-00000000",
+      "purpose_of_loan": "Lakasfeleujitas",
+      "phone_number": "+36 20 123 4567",
+      "email_address": "nagy.istvan@email.hu"
+    },
+    "supporting_documents": {
+      "identity_card": {
+        "first_name": "Istvan",
+        "last_name": "Nagy",
+        "personal_id_number": "1 850102 1234",
+        "document_number": "123456AA",
+        "date_of_birth": "1985-01-02",
+        "expiry_date": "2031-03-15",
+        "mothers_name": "Kiss Maria"
+      },
+      "address_card": {
+        "card_holder_name": "Nagy Istvan",
+        "permanent_address": "1051 Budapest, Vorosmarty ter 5. 3. em. 12.",
+        "card_number": "LA-123456"
+      },
+      "income_proof": {
+        "employer_name": "ABC Informatika Kft.",
+        "employee_name": "Nagy Istvan",
+        "gross_monthly_salary": "850000 HUF",
+        "net_monthly_salary": "565000 HUF"
+      },
+      "bank_statement": {
+        "bank_name": "OTP Bank Nyrt.",
+        "customer_name": "Nagy Istvan",
+        "account_number": "11773016-12345678-00000000",
+        "closing_balance": "1450000 HUF"
+      }
+    },
+    "conflicts": []
+  },
+  {
+    "application_id": "APP-PL-CONFLICT-001",
+    "scenario": "CONFLICT - Income overstated",
+    "market": "PL",
+    "expected_result": "HIGH risk - income discrepancy >10% should flag",
+    "loan_application": {
+      "applicant_full_name": "Anna Nowak-Wisniewska",
+      "date_of_birth": "1990-07-15",
+      "residential_address": "ul. Dluga 22/4, 31-001 Krakow",
+      "declared_net_monthly_income": "5200.00",
+      "declared_income_currency": "PLN",
+      "requested_loan_amount": "8000.00",
+      "loan_term_weeks": "40",
+      "employment_status": "Employed",
+      "employer_name": "XYZ Handel S.A.",
+      "bank_account_number": "PL61 1020 1026 0000 0422 8888 5678",
+      "purpose_of_loan": "Zakup sprzetu AGD",
+      "phone_number": "+48 501 987 654",
+      "email_address": "anna.nowak@email.pl"
+    },
+    "supporting_documents": {
+      "identity_card": {
+        "first_name": "Anna",
+        "last_name": "Nowak-Wisniewska",
+        "pesel": "90071567890",
+        "document_number": "CDE789012",
+        "date_of_birth": "1990-07-15",
+        "expiry_date": "2029-11-20"
+      },
+      "utility_bill": {
+        "provider_name": "PGNiG S.A.",
+        "customer_name": "Anna Nowak-Wisniewska",
+        "customer_address": "ul. Dluga 22/4, 31-001 Krakow",
+        "invoice_date": "2026-04-10",
+        "amount_due": "178.34 PLN"
+      },
+      "payslip": {
+        "employer_name": "XYZ Handel S.A.",
+        "employee_name": "Anna Nowak-Wisniewska",
+        "pay_period": "04/2026",
+        "gross_salary": "6200.00 PLN",
+        "net_salary": "4510.00 PLN",
+        "employee_pesel": "90071567890"
+      },
+      "bank_statement": {
+        "bank_name": "PKO Bank Polski S.A.",
+        "customer_name": "Anna Nowak-Wisniewska",
+        "account_number": "PL61 1020 1026 0000 0422 8888 5678",
+        "closing_balance": "2300.00 PLN"
+      }
+    },
+    "conflicts": [
+      {
+        "type": "INCOME_MISMATCH",
+        "severity": "HIGH",
+        "declared": "5200.00 PLN net",
+        "actual": "4510.00 PLN net",
+        "variance_pct": "15.3%",
+        "description": "Declared income exceeds actual payslip income by 15.3% - exceeds 10% threshold"
+      }
+    ]
+  },
+  {
+    "application_id": "APP-RO-CONFLICT-001",
+    "scenario": "CONFLICT - Address mismatch + Name variation",
+    "market": "RO",
+    "expected_result": "MEDIUM risk - address mismatch flagged",
+    "loan_application": {
+      "applicant_full_name": "Maria Ionescu",
+      "date_of_birth": "1990-07-20",
+      "residential_address": "Str. Lalelelor Nr. 10, Voluntari, Jud. Ilfov",
+      "declared_net_monthly_income": "3560.00",
+      "declared_income_currency": "RON",
+      "requested_loan_amount": "2500.00",
+      "loan_term_weeks": "26",
+      "employment_status": "Angajat",
+      "employer_name": "Retail Group S.R.L.",
+      "bank_account_number": "RO49 BTRL 0130 1202 9999 0001",
+      "purpose_of_loan": "Plata datorii",
+      "phone_number": "+40 723 456 789",
+      "email_address": "m.ionescu@email.ro"
+    },
+    "supporting_documents": {
+      "identity_card": {
+        "first_name": "Maria",
+        "last_name": "Ionescu-Gheorghe",
+        "cnp": "2900720410234",
+        "document_number": "234567890",
+        "date_of_birth": "1990-07-20",
+        "expiry_date": "2030-02-15",
+        "address": "Str. Lalelelor Nr. 10, Voluntari, Jud. Ilfov"
+      },
+      "utility_bill": {
+        "provider_name": "E.ON Energie Romania S.A.",
+        "customer_name": "Maria Ionescu-Gheorghe",
+        "customer_address": "Str. Dorobanti Nr. 100, Ap. 3, Sector 2, Bucuresti",
+        "invoice_date": "2026-04-05",
+        "amount_due": "215.80 RON"
+      },
+      "payslip": {
+        "employer_name": "Retail Group S.R.L.",
+        "employee_name": "Maria Ionescu-Gheorghe",
+        "pay_period": "04/2026",
+        "gross_salary": "5800.00 RON",
+        "net_salary": "3560.00 RON",
+        "employee_cnp": "2900720410234"
+      },
+      "bank_statement": {
+        "bank_name": "Banca Transilvania S.A.",
+        "customer_name": "Maria Ionescu",
+        "iban": "RO49 BTRL 0130 1202 9999 0001",
+        "closing_balance": "890.20 RON"
+      }
+    },
+    "conflicts": [
+      {
+        "type": "ADDRESS_MISMATCH",
+        "severity": "MEDIUM",
+        "declared": "Str. Lalelelor Nr. 10, Voluntari, Jud. Ilfov",
+        "actual": "Str. Dorobanti Nr. 100, Ap. 3, Sector 2, Bucuresti",
+        "description": "Utility bill shows completely different address from loan application"
+      },
+      {
+        "type": "NAME_VARIATION",
+        "severity": "LOW",
+        "declared": "Maria Ionescu",
+        "actual": "Maria Ionescu-Gheorghe",
+        "description": "Loan application uses shortened surname - may be legitimate but requires verification"
+      }
+    ]
+  },
+  {
+    "application_id": "APP-CZ-CONFLICT-001",
+    "scenario": "CONFLICT - Multiple high-risk issues",
+    "market": "CZ",
+    "expected_result": "HIGH risk - income overstated + address mismatch + bank account mismatch",
+    "loan_application": {
+      "applicant_full_name": "Petr Dvorak",
+      "date_of_birth": "1978-09-12",
+      "residential_address": "Masarykova 15, 602 00 Brno",
+      "declared_net_monthly_income": "42000.00",
+      "declared_income_currency": "CZK",
+      "requested_loan_amount": "150000.00",
+      "loan_term_weeks": "104",
+      "employment_status": "OSVC (zivnostnik)",
+      "employer_name": "DEF Logistyka s.r.o.",
+      "bank_account_number": "CZ65 0800 0000 1920 0014 5399",
+      "purpose_of_loan": "Rozvoj podnikani",
+      "phone_number": "+420 601 234 567",
+      "email_address": "p.dvorak@email.cz"
+    },
+    "supporting_documents": {
+      "identity_card": {
+        "first_name": "Petr",
+        "last_name": "Dvorak",
+        "rodne_cislo": "780912/3456",
+        "document_number": "111222333",
+        "date_of_birth": "1978-09-12",
+        "expiry_date": "2024-03-01",
+        "permanent_address": "Masarykova 15, 602 00 Brno"
+      },
+      "payslip": {
+        "employer_name": "DEF Logistyka s.r.o.",
+        "employee_name": "Petr Dvorak",
+        "pay_period": "03/2026",
+        "gross_salary": "45000.00 CZK",
+        "net_salary": "34000.00 CZK",
+        "position": "Skladnik"
+      },
+      "proof_of_residence": {
+        "document_title": "SIPO",
+        "holder_name": "Petr Dvorak",
+        "address": "Komenskeho 8, 603 00 Brno",
+        "payment_period": "03/2026"
+      },
+      "bank_statement": {
+        "bank_name": "Ceska Sporitelna a.s.",
+        "customer_name": "Petr Dvorak",
+        "account_number": "CZ65 0800 0000 9999 0000 1111",
+        "closing_balance": "12500.00 CZK"
+      }
+    },
+    "conflicts": [
+      {
+        "type": "INCOME_MISMATCH",
+        "severity": "HIGH",
+        "declared": "42000.00 CZK net",
+        "actual": "34000.00 CZK net",
+        "variance_pct": "23.5%",
+        "description": "Declared income exceeds actual payslip by 23.5% - significant overstatement"
+      },
+      {
+        "type": "ADDRESS_MISMATCH",
+        "severity": "MEDIUM",
+        "declared": "Masarykova 15, 602 00 Brno",
+        "actual": "Komenskeho 8, 603 00 Brno (SIPO)",
+        "description": "SIPO payment shows different street from loan application"
+      },
+      {
+        "type": "BANK_ACCOUNT_MISMATCH",
+        "severity": "HIGH",
+        "declared": "CZ65 0800 0000 1920 0014 5399",
+        "actual": "CZ65 0800 0000 9999 0000 1111",
+        "description": "Bank account number on statement does not match declared account in loan application"
+      },
+      {
+        "type": "EXPIRED_IDENTITY_DOCUMENT",
+        "severity": "HIGH",
+        "declared": "N/A",
+        "actual": "Expiry date 2024-03-01",
+        "description": "Identity document is EXPIRED - must be renewed before processing"
+      }
+    ]
+  }
+]

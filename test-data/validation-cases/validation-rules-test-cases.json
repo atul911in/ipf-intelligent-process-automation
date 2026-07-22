@@ -1,0 +1,200 @@
+﻿[
+  {
+    "test_id": "VAL-001",
+    "test_name": "Valid PESEL checksum",
+    "market": "PL",
+    "field": "pesel",
+    "input": "85010212345",
+    "expected_result": "PASS",
+    "rule": "PESEL checksum validation (modulo 10 weighted sum)"
+  },
+  {
+    "test_id": "VAL-002",
+    "test_name": "Invalid PESEL checksum",
+    "market": "PL",
+    "field": "pesel",
+    "input": "85010212346",
+    "expected_result": "FAIL",
+    "rule": "Last digit does not match checksum calculation"
+  },
+  {
+    "test_id": "VAL-003",
+    "test_name": "PESEL too short",
+    "market": "PL",
+    "field": "pesel",
+    "input": "8501021234",
+    "expected_result": "FAIL",
+    "rule": "PESEL must be exactly 11 digits"
+  },
+  {
+    "test_id": "VAL-004",
+    "test_name": "Valid Romanian CNP",
+    "market": "RO",
+    "field": "cnp",
+    "input": "1850315400123",
+    "expected_result": "PASS",
+    "rule": "CNP 13-digit format, valid sex digit (1=M post-1900), valid date, valid region code"
+  },
+  {
+    "test_id": "VAL-005",
+    "test_name": "Invalid CNP - bad date",
+    "market": "RO",
+    "field": "cnp",
+    "input": "1851315400123",
+    "expected_result": "FAIL",
+    "rule": "Month 13 is invalid in CNP date component"
+  },
+  {
+    "test_id": "VAL-006",
+    "test_name": "CNP too short",
+    "market": "RO",
+    "field": "cnp",
+    "input": "185031540012",
+    "expected_result": "FAIL",
+    "rule": "CNP must be exactly 13 digits"
+  },
+  {
+    "test_id": "VAL-007",
+    "test_name": "Valid Polish ID number format",
+    "market": "PL",
+    "field": "document_number",
+    "input": "ABS123456",
+    "expected_result": "PASS",
+    "rule": "Format: 3 uppercase letters + 6 digits"
+  },
+  {
+    "test_id": "VAL-008",
+    "test_name": "Invalid Polish ID number format",
+    "market": "PL",
+    "field": "document_number",
+    "input": "AB1234567",
+    "expected_result": "FAIL",
+    "rule": "Only 2 letters instead of 3"
+  },
+  {
+    "test_id": "VAL-009",
+    "test_name": "Valid Romanian ID number format",
+    "market": "RO",
+    "field": "document_number",
+    "input": "123456789",
+    "expected_result": "PASS",
+    "rule": "Format: exactly 9 digits"
+  },
+  {
+    "test_id": "VAL-010",
+    "test_name": "Document not expired",
+    "market": "PL",
+    "field": "expiry_date",
+    "input": "2030-03-15",
+    "expected_result": "PASS",
+    "rule": "Expiry date is in the future"
+  },
+  {
+    "test_id": "VAL-011",
+    "test_name": "Document expired",
+    "market": "PL",
+    "field": "expiry_date",
+    "input": "2024-06-01",
+    "expected_result": "FAIL",
+    "rule": "Expiry date is in the past - document invalid"
+  },
+  {
+    "test_id": "VAL-012",
+    "test_name": "Age minimum 18 - valid",
+    "market": "PL",
+    "field": "date_of_birth",
+    "input": "1985-01-02",
+    "expected_result": "PASS",
+    "rule": "Customer is over 18 years old"
+  },
+  {
+    "test_id": "VAL-013",
+    "test_name": "Age minimum 18 - under age",
+    "market": "RO",
+    "field": "date_of_birth",
+    "input": "2010-05-15",
+    "expected_result": "FAIL",
+    "rule": "Customer is under 18 - not eligible"
+  },
+  {
+    "test_id": "VAL-014",
+    "test_name": "Name match - exact",
+    "market": "PL",
+    "field": "name_match",
+    "input": {"document_name": "Jan Kowalski", "application_name": "Jan Kowalski"},
+    "expected_result": "PASS",
+    "rule": "Names match exactly"
+  },
+  {
+    "test_id": "VAL-015",
+    "test_name": "Name match - minor variation (diacritics)",
+    "market": "PL",
+    "field": "name_match",
+    "input": {"document_name": "Malgorzata Wojciechowska", "application_name": "Malgorzata Wojciechowska"},
+    "expected_result": "PASS",
+    "rule": "Names match with diacritic normalization (similarity above 85%)"
+  },
+  {
+    "test_id": "VAL-016",
+    "test_name": "Name match - significant mismatch",
+    "market": "RO",
+    "field": "name_match",
+    "input": {"document_name": "Alexandru Popescu", "application_name": "Andrei Popescu"},
+    "expected_result": "FAIL",
+    "rule": "First names differ significantly - similarity below 85%"
+  },
+  {
+    "test_id": "VAL-017",
+    "test_name": "Address match - exact",
+    "market": "PL",
+    "field": "address_match",
+    "input": {"document_address": "ul. Marszalkowska 10 m. 5, 00-001 Warszawa", "application_address": "ul. Marszalkowska 10 m. 5, 00-001 Warszawa"},
+    "expected_result": "PASS",
+    "rule": "Addresses match"
+  },
+  {
+    "test_id": "VAL-018",
+    "test_name": "Address match - mismatch",
+    "market": "PL",
+    "field": "address_match",
+    "input": {"document_address": "ul. Pulawska 200/15, 02-670 Warszawa", "application_address": "ul. Marszalkowska 10 m. 5, 00-001 Warszawa"},
+    "expected_result": "FAIL",
+    "rule": "Addresses are completely different streets"
+  },
+  {
+    "test_id": "VAL-019",
+    "test_name": "Income discrepancy - within threshold",
+    "market": "PL",
+    "field": "income_match",
+    "input": {"document_income": 6120.00, "declared_income": 6300.00, "threshold_percent": 10},
+    "expected_result": "PASS",
+    "rule": "Discrepancy is 2.9% - within 10% threshold"
+  },
+  {
+    "test_id": "VAL-020",
+    "test_name": "Income discrepancy - exceeds threshold",
+    "market": "PL",
+    "field": "income_match",
+    "input": {"document_income": 4510.00, "declared_income": 5200.00, "threshold_percent": 10},
+    "expected_result": "FAIL",
+    "rule": "Discrepancy is 15.3% - exceeds 10% threshold"
+  },
+  {
+    "test_id": "VAL-021",
+    "test_name": "Confidence below threshold triggers review",
+    "market": "PL",
+    "field": "confidence_gate",
+    "input": {"field_name": "last_name", "confidence": 72},
+    "expected_result": "FLAG_FOR_REVIEW",
+    "rule": "Confidence 72% is below 85% threshold - must route to human"
+  },
+  {
+    "test_id": "VAL-022",
+    "test_name": "Confidence above threshold passes",
+    "market": "RO",
+    "field": "confidence_gate",
+    "input": {"field_name": "cnp", "confidence": 98},
+    "expected_result": "PASS",
+    "rule": "Confidence 98% is above 85% threshold"
+  }
+]

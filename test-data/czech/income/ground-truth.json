@@ -1,0 +1,116 @@
+﻿[
+  {
+    "document_id": "CZ-INC-001",
+    "document_type": "income_proof",
+    "sub_type": "payslip",
+    "market": "CZ",
+    "language": "cs",
+    "source_description": "Czech payslip (Vyplatni pasek)",
+    "ground_truth": {
+      "document_title": "Vyplatni pasek",
+      "employer_name": "Tech Solutions s.r.o.",
+      "employer_ico": "12345678",
+      "employer_address": "Vinohradska 100, 120 00 Praha 2",
+      "employee_name": "Jan Novak",
+      "rodne_cislo": "850102/1234",
+      "pay_period": "03/2026",
+      "gross_salary": "65000 CZK",
+      "net_salary": "48750 CZK",
+      "social_insurance": "4225 CZK",
+      "health_insurance": "2925 CZK",
+      "income_tax": "9100 CZK",
+      "payment_date": "2026-04-10"
+    },
+    "expected_confidence": "high",
+    "notes": "Standard payslip, matches CZ-ID-001"
+  },
+  {
+    "document_id": "CZ-INC-002",
+    "document_type": "income_proof",
+    "sub_type": "employee_proof_of_income",
+    "market": "CZ",
+    "language": "cs",
+    "source_description": "Czech Employee Proof of Income (Potvrzeni o prijmu)",
+    "ground_truth": {
+      "document_title": "Potvrzeni o vysi prijmu",
+      "employer_name": "Retail Group a.s.",
+      "employer_ico": "87654321",
+      "employee_name": "Olena Kovalenko",
+      "position": "Vedouci smeny",
+      "employment_since": "2021-01-15",
+      "contract_type": "Pracovni pomer na dobu neurcitou",
+      "average_net_monthly": "38000 CZK",
+      "issue_date": "2026-04-01",
+      "issued_by": "Personalni oddeleni"
+    },
+    "expected_confidence": "high",
+    "notes": "Employer proof of income for CZ-ID-002"
+  },
+  {
+    "document_id": "CZ-INC-003",
+    "document_type": "income_proof",
+    "sub_type": "trade_certificate",
+    "market": "CZ",
+    "language": "cs",
+    "source_description": "Czech Trade Certificate (Zivnostensky list)",
+    "ground_truth": {
+      "document_title": "Zivnostensky list",
+      "holder_name": "Petr Dvorak",
+      "rodne_cislo": "780912/3456",
+      "ico": "98765432",
+      "trade_type": "Volna zivnost",
+      "trade_subject": "Poradenstvi v oblasti IT",
+      "registered_address": "Masarykova 15, 602 00 Brno",
+      "issue_date": "2015-06-01",
+      "issuing_authority": "Zivnostensky urad mesta Brna"
+    },
+    "expected_confidence": "high",
+    "notes": "Trade certificate for self-employed individual"
+  },
+  {
+    "document_id": "CZ-INC-004",
+    "document_type": "income_proof",
+    "sub_type": "tax_return",
+    "market": "CZ",
+    "language": "cs",
+    "source_description": "Czech Tax Return (Danove priznani) - income discrepancy",
+    "ground_truth": {
+      "document_title": "Priznani k dani z prijmu fyzickych osob",
+      "taxpayer_name": "Petr Dvorak",
+      "rodne_cislo": "780912/3456",
+      "ico": "98765432",
+      "tax_year": "2025",
+      "total_income": "980000 CZK",
+      "expenses": "490000 CZK",
+      "tax_base": "490000 CZK",
+      "tax_paid": "73500 CZK",
+      "monthly_avg_net": "34000 CZK",
+      "filed_date": "2026-03-31"
+    },
+    "expected_confidence": "high",
+    "notes": "Monthly avg 34000 CZK but application declares 42000 CZK - exceeds 10% - should flag"
+  },
+  {
+    "document_id": "CZ-INC-005",
+    "document_type": "income_proof",
+    "sub_type": "employment_contract",
+    "market": "CZ",
+    "language": "cs",
+    "source_description": "Czech Employment Contract (Pracovni smlouva)",
+    "ground_truth": {
+      "document_title": "Pracovni smlouva",
+      "employer_name": "Logistics CZ s.r.o.",
+      "employer_ico": "55667788",
+      "employee_name": "Andrei Popescu",
+      "position": "Skladnik",
+      "start_date": "2023-02-01",
+      "contract_type": "Doba neurcita",
+      "agreed_gross_salary": "35000 CZK",
+      "working_hours": "40 hodin tydne",
+      "place_of_work": "Praha 9 - Horni Pocernice",
+      "signed_date": "2023-01-20"
+    },
+    "expected_confidence": "medium",
+    "notes": "Scanned contract for CZ-ID-004 - tests employment contract as income proof"
+  }
+]

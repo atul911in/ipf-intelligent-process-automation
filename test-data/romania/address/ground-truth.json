@@ -1,0 +1,89 @@
+﻿[
+  {
+    "document_id": "RO-ADDR-001",
+    "document_type": "utility_bill",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian electricity bill - Enel Energie",
+    "ground_truth": {
+      "provider_name": "Enel Energie S.A.",
+      "document_title": "Factura de energie electrica",
+      "invoice_number": "EE/2026/03/456789",
+      "invoice_date": "2026-03-20",
+      "customer_name": "Alexandru Popescu",
+      "customer_address": "Str. Victoriei Nr. 25, Bl. A1, Sc. 2, Et. 3, Ap. 15, Sector 1, Bucuresti",
+      "billing_period": "2026-02-01 pana la 2026-02-28",
+      "amount_due": "320.50 RON",
+      "due_date": "2026-04-05",
+      "meter_number": "EL-11223344",
+      "cui_provider": "RO12345678"
+    },
+    "expected_confidence": "high",
+    "notes": "Standard utility bill, address matches RO-ID-001"
+  },
+  {
+    "document_id": "RO-ADDR-002",
+    "document_type": "utility_bill",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian gas bill - E.ON Energie Romania",
+    "ground_truth": {
+      "provider_name": "E.ON Energie Romania S.A.",
+      "document_title": "Factura gaze naturale",
+      "invoice_number": "GN/2026/04/112233",
+      "invoice_date": "2026-04-05",
+      "customer_name": "Maria Ionescu-Gheorghe",
+      "customer_address": "Str. Lalelelor Nr. 10, Voluntari, Jud. Ilfov",
+      "billing_period": "2026-03-01 pana la 2026-03-31",
+      "amount_due": "215.80 RON",
+      "due_date": "2026-04-20",
+      "meter_number": "GN-55667788",
+      "cui_provider": "RO87654321"
+    },
+    "expected_confidence": "high",
+    "notes": "Validates address for RO-ID-002"
+  },
+  {
+    "document_id": "RO-ADDR-003",
+    "document_type": "bank_statement",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian bank statement - Banca Transilvania",
+    "ground_truth": {
+      "bank_name": "Banca Transilvania S.A.",
+      "document_title": "Extras de cont",
+      "iban": "RO49 BTRL 0130 1202 1234 5678",
+      "statement_date": "2026-03-31",
+      "customer_name": "Ion Dumitrescu",
+      "customer_address": "Str. Memorandumului Nr. 5, Ap. 8, Cluj-Napoca, Jud. Cluj",
+      "statement_period": "2026-03-01 pana la 2026-03-31",
+      "opening_balance": "8,750.00 RON",
+      "closing_balance": "10,230.45 RON",
+      "currency": "RON"
+    },
+    "expected_confidence": "high",
+    "notes": "Bank statement as proof of address, validates for RO-ID-003"
+  },
+  {
+    "document_id": "RO-ADDR-004",
+    "document_type": "utility_bill",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian water bill - address mismatch test",
+    "ground_truth": {
+      "provider_name": "Apa Nova Bucuresti S.A.",
+      "document_title": "Factura apa si canalizare",
+      "invoice_number": "AN/2026/05/998877",
+      "invoice_date": "2026-05-01",
+      "customer_name": "Alexandru Popescu",
+      "customer_address": "Str. Dorobanti Nr. 100, Ap. 3, Sector 2, Bucuresti",
+      "billing_period": "2026-04-01 pana la 2026-04-30",
+      "amount_due": "125.30 RON",
+      "due_date": "2026-05-15",
+      "meter_number": "AP-99887766",
+      "cui_provider": "RO11223344"
+    },
+    "expected_confidence": "high",
+    "notes": "ADDRESS MISMATCH - address differs from RO-ID-001. Validation should flag discrepancy (Str. Dorobanti vs Str. Victoriei)"
+  }
+]

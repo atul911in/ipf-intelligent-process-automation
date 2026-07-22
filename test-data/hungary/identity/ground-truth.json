@@ -1,0 +1,97 @@
+﻿[
+  {
+    "document_id": "HU-ID-001",
+    "document_type": "identity_card",
+    "sub_type": "id_card",
+    "market": "HU",
+    "language": "hu",
+    "source_description": "Hungarian ID card (Szemelyazonossagi igazolvany) - clear scan",
+    "ground_truth": {
+      "first_name": "Istvan",
+      "last_name": "Nagy",
+      "personal_id_number": "1 850102 1234",
+      "document_number": "123456AA",
+      "date_of_birth": "1985-01-02",
+      "place_of_birth": "Budapest",
+      "mothers_name": "Kiss Maria",
+      "sex": "F (Ferfi)",
+      "nationality": "Magyar",
+      "issue_date": "2021-03-15",
+      "expiry_date": "2031-03-15",
+      "issuing_authority": "Budapest Fovaros Kormanyhivatala"
+    },
+    "expected_confidence": "high",
+    "notes": "Clean scan, all fields clear. Hungarian personal ID uses format: S YYMMDD NNNN"
+  },
+  {
+    "document_id": "HU-ID-002",
+    "document_type": "identity_card",
+    "sub_type": "passport",
+    "market": "HU",
+    "language": "hu",
+    "source_description": "Hungarian passport (Utlevel) - mobile photo",
+    "ground_truth": {
+      "first_name": "Anna",
+      "last_name": "Szabo",
+      "personal_id_number": "2 900715 5678",
+      "document_number": "BA1234567",
+      "date_of_birth": "1990-07-15",
+      "place_of_birth": "Debrecen",
+      "mothers_name": "Toth Erzsebet",
+      "sex": "N (No)",
+      "nationality": "Magyar",
+      "issue_date": "2020-06-01",
+      "expiry_date": "2030-06-01",
+      "mrz_line_1": "P<HUNSZABO<<ANNA<<<<<<<<<<<<<<<<<<<<<<<<<<<",
+      "mrz_line_2": "BA12345671HUN9007150F3006012<<<<<<<<<<<<<<04"
+    },
+    "expected_confidence": "medium",
+    "notes": "Mobile photo of passport biodata page"
+  },
+  {
+    "document_id": "HU-ID-003",
+    "document_type": "identity_card",
+    "sub_type": "driving_license",
+    "market": "HU",
+    "language": "hu",
+    "source_description": "Hungarian driving license (Vezeto engedely)",
+    "ground_truth": {
+      "first_name": "Peter",
+      "last_name": "Horvath",
+      "personal_id_number": "1 780523 9012",
+      "document_number": "VE123456",
+      "date_of_birth": "1978-05-23",
+      "place_of_birth": "Szeged",
+      "issue_date": "2019-09-10",
+      "expiry_date": "2034-09-10",
+      "categories": "B, BE",
+      "issuing_authority": "Csongrad-Csanad Varmegye Kormanyhivatala"
+    },
+    "expected_confidence": "high",
+    "notes": "Clear scan of driving license - tests different ID sub-type"
+  },
+  {
+    "document_id": "HU-ID-004",
+    "document_type": "identity_card",
+    "sub_type": "id_card",
+    "market": "HU",
+    "language": "hu",
+    "source_description": "Hungarian ID - EXPIRED document",
+    "ground_truth": {
+      "first_name": "Katalin",
+      "last_name": "Varga",
+      "personal_id_number": "2 820310 3456",
+      "document_number": "456789BB",
+      "date_of_birth": "1982-03-10",
+      "place_of_birth": "Pecs",
+      "mothers_name": "Nemeth Judit",
+      "sex": "N (No)",
+      "nationality": "Magyar",
+      "issue_date": "2014-05-20",
+      "expiry_date": "2024-05-20",
+      "issuing_authority": "Baranya Varmegye Kormanyhivatala"
+    },
+    "expected_confidence": "high",
+    "notes": "EXPIRED document (2024-05-20) - validation should flag"
+  }
+]

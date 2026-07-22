@@ -1,0 +1,122 @@
+﻿[
+  {
+    "document_id": "RO-ID-001",
+    "document_type": "national_identity_card",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian Carte de Identitate - clear scan",
+    "ground_truth": {
+      "first_name": "Alexandru",
+      "last_name": "Popescu",
+      "cnp": "1850315400123",
+      "document_number": "123456789",
+      "document_series": "RD",
+      "date_of_birth": "1985-03-15",
+      "place_of_birth": "Bucuresti",
+      "sex": "M",
+      "issue_date": "2021-06-10",
+      "expiry_date": "2031-06-10",
+      "issuing_authority": "SPCLEP Sector 1",
+      "address": "Str. Victoriei Nr. 25, Bl. A1, Sc. 2, Et. 3, Ap. 15, Sector 1, Bucuresti",
+      "nationality": "romana"
+    },
+    "expected_confidence": "high",
+    "notes": "Clean scan, valid CNP (M, 1985-03-15, Bucharest region 40), all fields clear"
+  },
+  {
+    "document_id": "RO-ID-002",
+    "document_type": "national_identity_card",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian CI - mobile photo, slightly rotated",
+    "ground_truth": {
+      "first_name": "Maria",
+      "last_name": "Ionescu-Gheorghe",
+      "cnp": "2900720410234",
+      "document_number": "234567890",
+      "document_series": "IF",
+      "date_of_birth": "1990-07-20",
+      "place_of_birth": "Ilfov",
+      "sex": "F",
+      "issue_date": "2020-02-15",
+      "expiry_date": "2030-02-15",
+      "issuing_authority": "SPCLEP Ilfov",
+      "address": "Str. Lalelelor Nr. 10, Voluntari, Jud. Ilfov",
+      "nationality": "romana"
+    },
+    "expected_confidence": "medium",
+    "notes": "Mobile photo with rotation - tests image preprocessing; double surname with Romanian characters"
+  },
+  {
+    "document_id": "RO-ID-003",
+    "document_type": "national_identity_card",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian CI - expired document",
+    "ground_truth": {
+      "first_name": "Ion",
+      "last_name": "Dumitrescu",
+      "cnp": "1780912350345",
+      "document_number": "345678901",
+      "document_series": "CJ",
+      "date_of_birth": "1978-09-12",
+      "place_of_birth": "Cluj-Napoca",
+      "sex": "M",
+      "issue_date": "2014-04-20",
+      "expiry_date": "2024-04-20",
+      "issuing_authority": "SPCLEP Cluj-Napoca",
+      "address": "Str. Memorandumului Nr. 5, Ap. 8, Cluj-Napoca, Jud. Cluj",
+      "nationality": "romana"
+    },
+    "expected_confidence": "high",
+    "notes": "Document is EXPIRED (2024-04-20) - validation must flag this"
+  },
+  {
+    "document_id": "RO-ID-004",
+    "document_type": "national_identity_card",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian CI - name with special Romanian characters",
+    "ground_truth": {
+      "first_name": "Stefan",
+      "last_name": "Tanase",
+      "cnp": "1920225120456",
+      "document_number": "456789012",
+      "document_series": "TM",
+      "date_of_birth": "1992-02-25",
+      "place_of_birth": "Timisoara",
+      "sex": "M",
+      "issue_date": "2022-08-01",
+      "expiry_date": "2032-08-01",
+      "issuing_authority": "SPCLEP Timisoara",
+      "address": "Bd. Revolutiei Nr. 30, Et. 2, Ap. 7, Timisoara, Jud. Timis",
+      "nationality": "romana"
+    },
+    "expected_confidence": "high",
+    "notes": "Tests Romanian diacritical characters (s-comma, t-comma, a-breve, i-circumflex)"
+  },
+  {
+    "document_id": "RO-ID-005",
+    "document_type": "national_identity_card",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian CI - poor quality, water damage",
+    "ground_truth": {
+      "first_name": "Elena",
+      "last_name": "Moldovan",
+      "cnp": "2880610030567",
+      "document_number": "567890123",
+      "document_series": "BV",
+      "date_of_birth": "1988-06-10",
+      "place_of_birth": "Brasov",
+      "sex": "F",
+      "issue_date": "2019-11-05",
+      "expiry_date": "2029-11-05",
+      "issuing_authority": "SPCLEP Brasov",
+      "address": "Str. Republicii Nr. 45, Brasov, Jud. Brasov",
+      "nationality": "romana"
+    },
+    "expected_confidence": "low",
+    "notes": "Water-damaged document - multiple fields expected below 85% confidence, triggers human review"
+  }
+]

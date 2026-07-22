@@ -1,0 +1,131 @@
+﻿{
+  "schemas": {
+    "PL": {
+      "national_identity_card": {
+        "document_type": "national_identity_card",
+        "local_name": "Dowod Osobisty",
+        "market": "PL",
+        "required_fields": [
+          {"name": "first_name", "type": "string", "label_pl": "Imie / Imiona", "validation": "alpha_polish_spaces"},
+          {"name": "last_name", "type": "string", "label_pl": "Nazwisko", "validation": "alpha_polish_hyphen"},
+          {"name": "pesel", "type": "string", "label_pl": "PESEL", "validation": "pesel_checksum_11_digits"},
+          {"name": "document_number", "type": "string", "label_pl": "Nr dokumentu", "validation": "regex:^[A-Z]{3}[0-9]{6}$"},
+          {"name": "date_of_birth", "type": "date", "label_pl": "Data urodzenia", "validation": "valid_date,age_minimum_18"},
+          {"name": "expiry_date", "type": "date", "label_pl": "Wazny do", "validation": "valid_date,not_expired"},
+          {"name": "issue_date", "type": "date", "label_pl": "Data wydania", "validation": "valid_date,not_future"},
+          {"name": "sex", "type": "string", "label_pl": "Plec", "validation": "enum:M,K"},
+          {"name": "nationality", "type": "string", "label_pl": "Obywatelstwo", "validation": "not_empty"},
+          {"name": "issuing_authority", "type": "string", "label_pl": "Organ wydajacy", "validation": "not_empty"}
+        ],
+        "optional_fields": [
+          {"name": "place_of_birth", "type": "string", "label_pl": "Miejsce urodzenia"},
+          {"name": "address", "type": "string", "label_pl": "Adres zameldowania"}
+        ]
+      },
+      "utility_bill": {
+        "document_type": "utility_bill",
+        "local_name": "Faktura VAT",
+        "market": "PL",
+        "required_fields": [
+          {"name": "provider_name", "type": "string", "label_pl": "Sprzedawca / Wystawca", "validation": "not_empty"},
+          {"name": "customer_name", "type": "string", "label_pl": "Nabywca / Odbiorca", "validation": "not_empty"},
+          {"name": "customer_address", "type": "string", "label_pl": "Adres odbiorcy", "validation": "not_empty"},
+          {"name": "invoice_date", "type": "date", "label_pl": "Data wystawienia", "validation": "valid_date,within_6_months"},
+          {"name": "amount_due", "type": "currency", "label_pl": "Do zaplaty", "validation": "positive_number"}
+        ],
+        "optional_fields": [
+          {"name": "invoice_number", "type": "string", "label_pl": "Numer faktury"},
+          {"name": "billing_period", "type": "string", "label_pl": "Okres rozliczeniowy"},
+          {"name": "due_date", "type": "date", "label_pl": "Termin platnosci"},
+          {"name": "meter_number", "type": "string", "label_pl": "Numer licznika"}
+        ]
+      },
+      "payslip": {
+        "document_type": "payslip",
+        "local_name": "Pasek wynagrodzen / Odcinek placowy",
+        "market": "PL",
+        "required_fields": [
+          {"name": "employer_name", "type": "string", "label_pl": "Pracodawca", "validation": "not_empty"},
+          {"name": "employee_name", "type": "string", "label_pl": "Pracownik", "validation": "not_empty"},
+          {"name": "pay_period", "type": "string", "label_pl": "Okres", "validation": "valid_month_year"},
+          {"name": "gross_salary", "type": "currency", "label_pl": "Wynagrodzenie brutto", "validation": "positive_number"},
+          {"name": "net_salary", "type": "currency", "label_pl": "Wynagrodzenie netto / Do wyplaty", "validation": "positive_number"}
+        ],
+        "optional_fields": [
+          {"name": "employer_nip", "type": "string", "label_pl": "NIP pracodawcy"},
+          {"name": "employee_pesel", "type": "string", "label_pl": "PESEL pracownika"},
+          {"name": "tax_deducted", "type": "currency", "label_pl": "Zaliczka na podatek"},
+          {"name": "social_security_employee", "type": "currency", "label_pl": "Skladki ZUS pracownik"},
+          {"name": "payment_date", "type": "date", "label_pl": "Data wyplaty"},
+          {"name": "position", "type": "string", "label_pl": "Stanowisko"},
+          {"name": "employment_type", "type": "string", "label_pl": "Rodzaj umowy"}
+        ]
+      }
+    },
+    "RO": {
+      "national_identity_card": {
+        "document_type": "national_identity_card",
+        "local_name": "Carte de Identitate (CI)",
+        "market": "RO",
+        "required_fields": [
+          {"name": "first_name", "type": "string", "label_ro": "Prenume", "validation": "alpha_romanian_spaces"},
+          {"name": "last_name", "type": "string", "label_ro": "Nume", "validation": "alpha_romanian_hyphen"},
+          {"name": "cnp", "type": "string", "label_ro": "CNP", "validation": "cnp_checksum_13_digits"},
+          {"name": "document_number", "type": "string", "label_ro": "Nr. card", "validation": "regex:^[0-9]{9}$"},
+          {"name": "document_series", "type": "string", "label_ro": "Seria", "validation": "regex:^[A-Z]{2}$"},
+          {"name": "date_of_birth", "type": "date", "label_ro": "Data nasterii", "validation": "valid_date,age_minimum_18"},
+          {"name": "expiry_date", "type": "date", "label_ro": "Valabil pana la", "validation": "valid_date,not_expired"},
+          {"name": "sex", "type": "string", "label_ro": "Sex", "validation": "enum:M,F"},
+          {"name": "address", "type": "string", "label_ro": "Domiciliu", "validation": "not_empty"}
+        ],
+        "optional_fields": [
+          {"name": "place_of_birth", "type": "string", "label_ro": "Locul nasterii"},
+          {"name": "issue_date", "type": "date", "label_ro": "Data emiterii"},
+          {"name": "issuing_authority", "type": "string", "label_ro": "Emis de"},
+          {"name": "nationality", "type": "string", "label_ro": "Cetatenie"}
+        ]
+      },
+      "utility_bill": {
+        "document_type": "utility_bill",
+        "local_name": "Factura utilitati",
+        "market": "RO",
+        "required_fields": [
+          {"name": "provider_name", "type": "string", "label_ro": "Furnizor", "validation": "not_empty"},
+          {"name": "customer_name", "type": "string", "label_ro": "Client / Consumator", "validation": "not_empty"},
+          {"name": "customer_address", "type": "string", "label_ro": "Adresa loc consum", "validation": "not_empty"},
+          {"name": "invoice_date", "type": "date", "label_ro": "Data emitere", "validation": "valid_date,within_6_months"},
+          {"name": "amount_due", "type": "currency", "label_ro": "Total de plata", "validation": "positive_number"}
+        ],
+        "optional_fields": [
+          {"name": "invoice_number", "type": "string", "label_ro": "Nr. factura"},
+          {"name": "billing_period", "type": "string", "label_ro": "Perioada de facturare"},
+          {"name": "due_date", "type": "date", "label_ro": "Termen de plata"},
+          {"name": "meter_number", "type": "string", "label_ro": "Serie contor"},
+          {"name": "cui_provider", "type": "string", "label_ro": "CUI furnizor"}
+        ]
+      },
+      "payslip": {
+        "document_type": "payslip",
+        "local_name": "Fluturas de salariu",
+        "market": "RO",
+        "required_fields": [
+          {"name": "employer_name", "type": "string", "label_ro": "Angajator", "validation": "not_empty"},
+          {"name": "employee_name", "type": "string", "label_ro": "Angajat / Salariat", "validation": "not_empty"},
+          {"name": "pay_period", "type": "string", "label_ro": "Luna", "validation": "valid_month_year"},
+          {"name": "gross_salary", "type": "currency", "label_ro": "Salariu brut", "validation": "positive_number"},
+          {"name": "net_salary", "type": "currency", "label_ro": "Salariu net / Rest de plata", "validation": "positive_number"}
+        ],
+        "optional_fields": [
+          {"name": "employer_cui", "type": "string", "label_ro": "CUI angajator"},
+          {"name": "employee_cnp", "type": "string", "label_ro": "CNP angajat"},
+          {"name": "income_tax", "type": "currency", "label_ro": "Impozit pe venit"},
+          {"name": "cas_employee", "type": "currency", "label_ro": "CAS angajat (pensie)"},
+          {"name": "cass_employee", "type": "currency", "label_ro": "CASS angajat (sanatate)"},
+          {"name": "payment_date", "type": "date", "label_ro": "Data platii"},
+          {"name": "position", "type": "string", "label_ro": "Functia"},
+          {"name": "contract_type", "type": "string", "label_ro": "Tip contract"}
+        ]
+      }
+    }
+  }
+}

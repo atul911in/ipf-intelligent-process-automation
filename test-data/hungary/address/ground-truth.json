@@ -1,0 +1,42 @@
+﻿[
+  {
+    "document_id": "HU-ADDR-001",
+    "document_type": "address_card",
+    "sub_type": "address_card",
+    "market": "HU",
+    "language": "hu",
+    "source_description": "Hungarian Address Card (Lakcimkartya) - standard",
+    "ground_truth": {
+      "document_title": "Hatosagi igazolvany a lakcimrol",
+      "card_holder_name": "Nagy Istvan",
+      "personal_id_number": "1 850102 1234",
+      "permanent_address": "1051 Budapest, Vorosmarty ter 5. 3. em. 12.",
+      "temporary_address": null,
+      "issue_date": "2021-03-15",
+      "issuing_authority": "Budapest Fovaros Kormanyhivatala",
+      "card_number": "LA-123456"
+    },
+    "expected_confidence": "high",
+    "notes": "Standard address card matching HU-ID-001"
+  },
+  {
+    "document_id": "HU-ADDR-002",
+    "document_type": "address_card",
+    "sub_type": "address_card",
+    "market": "HU",
+    "language": "hu",
+    "source_description": "Hungarian Address Card - address MISMATCH test",
+    "ground_truth": {
+      "document_title": "Hatosagi igazolvany a lakcimrol",
+      "card_holder_name": "Nagy Istvan",
+      "personal_id_number": "1 850102 1234",
+      "permanent_address": "1134 Budapest, Lehel utca 22. 1. em. 3.",
+      "temporary_address": null,
+      "issue_date": "2023-01-10",
+      "issuing_authority": "Budapest Fovaros Kormanyhivatala",
+      "card_number": "LA-789012"
+    },
+    "expected_confidence": "high",
+    "notes": "ADDRESS MISMATCH - different from other documents. Should flag discrepancy."
+  }
+]

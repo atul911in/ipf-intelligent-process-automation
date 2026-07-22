@@ -1,0 +1,97 @@
+﻿[
+  {
+    "document_id": "PL-INC-001",
+    "document_type": "payslip",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Polish payslip (pasek wynagrodzen) - standard corporate format",
+    "ground_truth": {
+      "employer_name": "ABC Polska Sp. z o.o.",
+      "employer_address": "ul. Koszykowa 50, 00-001 Warszawa",
+      "employer_nip": "5271234567",
+      "employee_name": "Jan Kowalski",
+      "employee_pesel": "85010212345",
+      "pay_period": "2026-03",
+      "gross_salary": "8500.00 PLN",
+      "net_salary": "6120.00 PLN",
+      "tax_deducted": "1190.00 PLN",
+      "social_security_employee": "1190.00 PLN",
+      "payment_date": "2026-03-28",
+      "employment_type": "umowa o prace",
+      "position": "Specjalista ds. sprzedazy"
+    },
+    "expected_confidence": "high",
+    "notes": "Standard payslip, matches PL-ID-001 name and PESEL"
+  },
+  {
+    "document_id": "PL-INC-002",
+    "document_type": "payslip",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Polish payslip - income discrepancy test case",
+    "ground_truth": {
+      "employer_name": "XYZ Handel S.A.",
+      "employer_address": "ul. Florianska 15, 31-001 Krakow",
+      "employer_nip": "6791234567",
+      "employee_name": "Anna Nowak-Wisniewska",
+      "employee_pesel": "90071567890",
+      "pay_period": "2026-04",
+      "gross_salary": "6200.00 PLN",
+      "net_salary": "4510.00 PLN",
+      "tax_deducted": "840.00 PLN",
+      "social_security_employee": "850.00 PLN",
+      "payment_date": "2026-04-28",
+      "employment_type": "umowa o prace",
+      "position": "Kierownik zmiany"
+    },
+    "expected_confidence": "high",
+    "notes": "Net salary 4510 PLN but loan application declares 5200 PLN - exceeds 10% threshold, should flag discrepancy"
+  },
+  {
+    "document_id": "PL-INC-003",
+    "document_type": "employment_contract",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Polish employment contract (umowa o prace) - scanned",
+    "ground_truth": {
+      "document_title": "Umowa o Prace",
+      "employer_name": "DEF Logistyka Sp. z o.o.",
+      "employer_address": "ul. Portowa 10, 80-001 Gdansk",
+      "employer_nip": "5831234567",
+      "employee_name": "Piotr Zielinski",
+      "employee_pesel": "78052398765",
+      "contract_date": "2023-01-15",
+      "contract_type": "czas nieokreslony",
+      "gross_monthly_salary": "9800.00 PLN",
+      "position": "Magazynier starszy",
+      "working_hours": "pelny etat",
+      "start_date": "2023-02-01"
+    },
+    "expected_confidence": "medium",
+    "notes": "Scanned contract, some handwritten annotations in margins - may affect confidence"
+  },
+  {
+    "document_id": "PL-INC-004",
+    "document_type": "payslip",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Polish payslip - very low quality mobile photo",
+    "ground_truth": {
+      "employer_name": "GHI Budownictwo S.A.",
+      "employer_address": "ul. Piotrkowska 200, 90-001 Lodz",
+      "employer_nip": "7251234567",
+      "employee_name": "Malgorzata Wojciechowska-Dabrowska",
+      "employee_pesel": "92031245678",
+      "pay_period": "2026-05",
+      "gross_salary": "7200.00 PLN",
+      "net_salary": "5230.00 PLN",
+      "tax_deducted": "980.00 PLN",
+      "social_security_employee": "990.00 PLN",
+      "payment_date": "2026-05-28",
+      "employment_type": "umowa o prace",
+      "position": "Ksiegowa"
+    },
+    "expected_confidence": "low",
+    "notes": "Very blurry mobile photo - multiple fields expected below 85% confidence, should trigger human review"
+  }
+]

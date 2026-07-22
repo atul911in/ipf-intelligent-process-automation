@@ -1,0 +1,88 @@
+﻿[
+  {
+    "document_id": "HU-INC-001",
+    "document_type": "income_proof",
+    "sub_type": "employer_income_cert",
+    "market": "HU",
+    "language": "hu",
+    "source_description": "Hungarian Employer Income Certificate (Munkaltato jovedelemigazolasa)",
+    "ground_truth": {
+      "document_title": "Jovedelemigazolas",
+      "employer_name": "ABC Informatika Kft.",
+      "employer_address": "1062 Budapest, Andrassy ut 100.",
+      "employer_tax_id": "12345678-2-42",
+      "employee_name": "Nagy Istvan",
+      "employee_tax_id": "8501021234",
+      "gross_monthly_salary": "850000 HUF",
+      "net_monthly_salary": "565000 HUF",
+      "employment_start_date": "2018-02-01",
+      "employment_type": "hatarozatlan ideju munkaszerz.",
+      "issue_date": "2026-03-20",
+      "issuer_name": "HR Osztaly",
+      "stamp_and_signature": true
+    },
+    "expected_confidence": "high",
+    "notes": "Standard employer cert, matches HU-ID-001"
+  },
+  {
+    "document_id": "HU-INC-002",
+    "document_type": "income_proof",
+    "sub_type": "national_tax_cert",
+    "market": "HU",
+    "language": "hu",
+    "source_description": "Hungarian NAV Income Certificate (NAV jovedelemigazolas)",
+    "ground_truth": {
+      "document_title": "Igazolas jovedelemrol - NAV",
+      "taxpayer_name": "Szabo Anna",
+      "tax_id": "9007155678",
+      "tax_year": "2025",
+      "total_annual_income": "7200000 HUF",
+      "tax_paid": "1080000 HUF",
+      "net_annual_income": "4800000 HUF",
+      "issue_date": "2026-04-15",
+      "issuing_authority": "Nemzeti Ado- es Vamhivatal"
+    },
+    "expected_confidence": "high",
+    "notes": "NAV tax cert for Szabo Anna (HU-ID-002)"
+  },
+  {
+    "document_id": "HU-INC-003",
+    "document_type": "income_proof",
+    "sub_type": "pension_slip",
+    "market": "HU",
+    "language": "hu",
+    "source_description": "Hungarian Pension Slip (Nyugdijszelveny)",
+    "ground_truth": {
+      "document_title": "Nyugdijosszesito",
+      "pensioner_name": "Horvath Peter",
+      "personal_id": "1 780523 9012",
+      "pension_type": "Oregsegi nyugdij",
+      "monthly_gross_pension": "320000 HUF",
+      "monthly_net_pension": "304000 HUF",
+      "payment_month": "2026-03",
+      "issuing_authority": "Magyar Allamkincstar"
+    },
+    "expected_confidence": "medium",
+    "notes": "Pension slip - tests non-employment income type"
+  },
+  {
+    "document_id": "HU-INC-004",
+    "document_type": "income_proof",
+    "sub_type": "employer_income_cert",
+    "market": "HU",
+    "language": "hu",
+    "source_description": "Hungarian income cert - INCOME DISCREPANCY test",
+    "ground_truth": {
+      "document_title": "Jovedelemigazolas",
+      "employer_name": "XYZ Kereskedelmi Zrt.",
+      "employer_address": "4026 Debrecen, Bethlen utca 10.",
+      "employee_name": "Szabo Anna",
+      "gross_monthly_salary": "620000 HUF",
+      "net_monthly_salary": "412000 HUF",
+      "employment_start_date": "2020-06-15",
+      "issue_date": "2026-04-01"
+    },
+    "expected_confidence": "high",
+    "notes": "Net 412000 HUF but application declares 500000 HUF - exceeds 10% threshold"
+  }
+]

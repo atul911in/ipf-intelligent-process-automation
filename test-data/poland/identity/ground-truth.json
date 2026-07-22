@@ -1,0 +1,117 @@
+﻿[
+  {
+    "document_id": "PL-ID-001",
+    "document_type": "national_identity_card",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Standard Polish Dowod Osobisty - clear scan, printed text",
+    "ground_truth": {
+      "first_name": "Jan",
+      "last_name": "Kowalski",
+      "pesel": "85010212345",
+      "document_number": "ABS123456",
+      "date_of_birth": "1985-01-02",
+      "place_of_birth": "Warszawa",
+      "issue_date": "2020-03-15",
+      "expiry_date": "2030-03-15",
+      "issuing_authority": "Prezydent m.st. Warszawy",
+      "nationality": "POLSKIE",
+      "sex": "M",
+      "address": "ul. Marszalkowska 10 m. 5, 00-001 Warszawa"
+    },
+    "expected_confidence": "high",
+    "notes": "Clean scan, all fields clearly printed, valid PESEL checksum"
+  },
+  {
+    "document_id": "PL-ID-002",
+    "document_type": "national_identity_card",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Polish ID - mobile photo, slight angle, some glare",
+    "ground_truth": {
+      "first_name": "Anna",
+      "last_name": "Nowak-Wisniewska",
+      "pesel": "90071567890",
+      "document_number": "CDE789012",
+      "date_of_birth": "1990-07-15",
+      "place_of_birth": "Krakow",
+      "issue_date": "2019-11-20",
+      "expiry_date": "2029-11-20",
+      "issuing_authority": "Prezydent m. Krakowa",
+      "nationality": "POLSKIE",
+      "sex": "K",
+      "address": "ul. Dluga 22/4, 31-001 Krakow"
+    },
+    "expected_confidence": "medium",
+    "notes": "Mobile photo with glare on surname area - may cause lower confidence on last_name field"
+  },
+  {
+    "document_id": "PL-ID-003",
+    "document_type": "national_identity_card",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Polish ID - expired document",
+    "ground_truth": {
+      "first_name": "Piotr",
+      "last_name": "Zielinski",
+      "pesel": "78052398765",
+      "document_number": "BCD456789",
+      "date_of_birth": "1978-05-23",
+      "place_of_birth": "Gdansk",
+      "issue_date": "2014-06-01",
+      "expiry_date": "2024-06-01",
+      "issuing_authority": "Prezydent m. Gdanska",
+      "nationality": "POLSKIE",
+      "sex": "M",
+      "address": "ul. Morska 55, 80-001 Gdansk"
+    },
+    "expected_confidence": "high",
+    "notes": "Document is EXPIRED (2024-06-01) - validation should flag this"
+  },
+  {
+    "document_id": "PL-ID-004",
+    "document_type": "national_identity_card",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Polish ID - double-barrelled name with Polish characters",
+    "ground_truth": {
+      "first_name": "Malgorzata",
+      "last_name": "Wojciechowska-Dabrowska",
+      "pesel": "92031245678",
+      "document_number": "EFG012345",
+      "date_of_birth": "1992-03-12",
+      "place_of_birth": "Lodz",
+      "issue_date": "2022-01-10",
+      "expiry_date": "2032-01-10",
+      "issuing_authority": "Prezydent m. Lodzi",
+      "nationality": "POLSKIE",
+      "sex": "K",
+      "address": "ul. Piotrkowska 100/12, 90-001 Lodz"
+    },
+    "expected_confidence": "high",
+    "notes": "Tests handling of double-barrelled surname and Polish diacritical characters"
+  },
+  {
+    "document_id": "PL-ID-005",
+    "document_type": "national_identity_card",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Polish ID - poor quality scan, faded text",
+    "ground_truth": {
+      "first_name": "Tomasz",
+      "last_name": "Lewandowski",
+      "pesel": "88090156789",
+      "document_number": "GHI345678",
+      "date_of_birth": "1988-09-01",
+      "place_of_birth": "Poznan",
+      "issue_date": "2021-05-20",
+      "expiry_date": "2031-05-20",
+      "issuing_authority": "Prezydent m. Poznania",
+      "nationality": "POLSKIE",
+      "sex": "M",
+      "address": "ul. Sw. Marcin 30/8, 61-001 Poznan"
+    },
+    "expected_confidence": "low",
+    "notes": "Faded document - OCR confidence expected below 85% on multiple fields, should trigger human review"
+  }
+]

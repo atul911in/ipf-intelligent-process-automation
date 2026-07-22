@@ -1,0 +1,100 @@
+﻿[
+  {
+    "document_id": "CZ-ID-001",
+    "document_type": "identity_card",
+    "sub_type": "id_card",
+    "market": "CZ",
+    "language": "cs",
+    "source_description": "Czech ID card (Obcansky prukaz) - clear scan",
+    "ground_truth": {
+      "first_name": "Jan",
+      "last_name": "Novak",
+      "rodne_cislo": "850102/1234",
+      "document_number": "123456789",
+      "date_of_birth": "1985-01-02",
+      "place_of_birth": "Praha",
+      "sex": "M",
+      "nationality": "CZE",
+      "permanent_address": "Vinohradska 1234/56, 120 00 Praha 2",
+      "issue_date": "2021-05-10",
+      "expiry_date": "2031-05-10",
+      "issuing_authority": "Mestsky urad Praha 2"
+    },
+    "expected_confidence": "high",
+    "notes": "Standard Czech ID. Rodne cislo format: YYMMDD/NNNN (for women month+50)"
+  },
+  {
+    "document_id": "CZ-ID-002",
+    "document_type": "identity_card",
+    "sub_type": "permanent_residence_permit",
+    "market": "CZ",
+    "language": "cs",
+    "source_description": "Czech Permanent Residence Permit (Povoleni k trvalemu pobytu)",
+    "ground_truth": {
+      "first_name": "Olena",
+      "last_name": "Kovalenko",
+      "rodne_cislo": "905720/5678",
+      "document_number": "987654321",
+      "date_of_birth": "1990-07-20",
+      "place_of_birth": "Kyiv, Ukraine",
+      "sex": "F",
+      "nationality": "UKR",
+      "permanent_address": "Namesti Miru 10/5, 120 00 Praha 2",
+      "issue_date": "2020-08-01",
+      "expiry_date": "2030-08-01",
+      "issuing_authority": "Ministerstvo vnitra CR",
+      "permit_type": "Povoleni k trvalemu pobytu"
+    },
+    "expected_confidence": "high",
+    "notes": "Permanent residence permit for foreign national. Female rodne cislo: month+50 (07+50=57)"
+  },
+  {
+    "document_id": "CZ-ID-003",
+    "document_type": "identity_card",
+    "sub_type": "id_card",
+    "market": "CZ",
+    "language": "cs",
+    "source_description": "Czech ID - EXPIRED",
+    "ground_truth": {
+      "first_name": "Petr",
+      "last_name": "Dvorak",
+      "rodne_cislo": "780912/3456",
+      "document_number": "111222333",
+      "date_of_birth": "1978-09-12",
+      "place_of_birth": "Brno",
+      "sex": "M",
+      "nationality": "CZE",
+      "permanent_address": "Masarykova 15, 602 00 Brno",
+      "issue_date": "2014-03-01",
+      "expiry_date": "2024-03-01",
+      "issuing_authority": "Mestsky urad Brno-stred"
+    },
+    "expected_confidence": "high",
+    "notes": "EXPIRED (2024-03-01) - validation must flag"
+  },
+  {
+    "document_id": "CZ-ID-004",
+    "document_type": "identity_card",
+    "sub_type": "temporary_residence_permit",
+    "market": "CZ",
+    "language": "cs",
+    "source_description": "Czech Temporary Residence Permit",
+    "ground_truth": {
+      "first_name": "Andrei",
+      "last_name": "Popescu",
+      "document_number": "444555666",
+      "date_of_birth": "1992-04-15",
+      "place_of_birth": "Bucharest, Romania",
+      "sex": "M",
+      "nationality": "ROU",
+      "address_in_cz": "Karlova 8, 110 00 Praha 1",
+      "issue_date": "2023-01-15",
+      "expiry_date": "2025-01-15",
+      "issuing_authority": "Ministerstvo vnitra CR",
+      "permit_type": "Povoleni k prechodne pobytu",
+      "purpose": "Zamestnani"
+    },
+    "expected_confidence": "high",
+    "notes": "Temporary residence permit - expiring soon (Jan 2025)"
+  }
+]

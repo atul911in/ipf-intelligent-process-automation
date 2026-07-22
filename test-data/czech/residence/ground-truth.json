@@ -1,0 +1,64 @@
+﻿[
+  {
+    "document_id": "CZ-RES-001",
+    "document_type": "proof_of_residence",
+    "sub_type": "sipo",
+    "market": "CZ",
+    "language": "cs",
+    "source_description": "Czech SIPO payment slip (unified utility payment)",
+    "ground_truth": {
+      "document_title": "SIPO - Soustredene inkaso plateb obyvatelstva",
+      "account_holder": "Jan Novak",
+      "address": "Vinohradska 1234/56, 120 00 Praha 2",
+      "payment_period": "03/2026",
+      "total_amount": "4500 CZK",
+      "components": ["najem 3200 CZK", "energie 800 CZK", "voda 300 CZK", "odpad 200 CZK"],
+      "variable_symbol": "1234567890",
+      "payment_date": "2026-03-15"
+    },
+    "expected_confidence": "high",
+    "notes": "SIPO is uniquely Czech - unified payment for housing utilities. Validates address for CZ-ID-001."
+  },
+  {
+    "document_id": "CZ-RES-002",
+    "document_type": "proof_of_residence",
+    "sub_type": "rental_contract",
+    "market": "CZ",
+    "language": "cs",
+    "source_description": "Czech Rental Contract (Najemni smlouva)",
+    "ground_truth": {
+      "document_title": "Najemni smlouva",
+      "landlord_name": "Bytove druzstvo Praha 2",
+      "tenant_name": "Olena Kovalenko",
+      "property_address": "Namesti Miru 10/5, 120 00 Praha 2",
+      "monthly_rent": "18000 CZK",
+      "contract_start": "2021-02-01",
+      "contract_end": "neurcita doba",
+      "deposit_amount": "36000 CZK",
+      "signed_date": "2021-01-25"
+    },
+    "expected_confidence": "medium",
+    "notes": "Scanned rental contract - validates address for CZ-ID-002"
+  },
+  {
+    "document_id": "CZ-RES-003",
+    "document_type": "proof_of_residence",
+    "sub_type": "ownership_certificate",
+    "market": "CZ",
+    "language": "cs",
+    "source_description": "Czech Certificate of Ownership (Potvrzeni o vlastnictvi nemovitosti)",
+    "ground_truth": {
+      "document_title": "Vypis z katastru nemovitosti",
+      "owner_name": "Petr Dvorak",
+      "property_address": "Masarykova 15, 602 00 Brno",
+      "parcel_number": "1234/5",
+      "property_type": "Byt (jednotka)",
+      "ownership_share": "1/1",
+      "registered_since": "2016-08-15",
+      "issuing_authority": "Katastralni urad pro Jihomoravsky kraj",
+      "issue_date": "2026-03-20"
+    },
+    "expected_confidence": "high",
+    "notes": "Land registry extract proving ownership - validates address for CZ-ID-003"
+  }
+]

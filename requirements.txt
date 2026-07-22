@@ -1,0 +1,35 @@
+﻿# IPF IPA PoC - Python Dependencies (pinned to installed versions)
+
+# Web framework
+fastapi==0.136.1
+uvicorn[standard]==0.46.0
+
+# Streamlit UIs
+streamlit==1.57.0
+
+# LangChain + LangGraph
+langchain==1.2.15
+langchain-openai==1.2.0
+langgraph==1.1.9
+
+# Supabase (database + storage)
+supabase==2.31.0
+
+# HTTP client
+requests==2.33.1
+httpx==0.27.2
+
+# Document processing - OCR pipeline
+Pillow==12.2.0
+reportlab==5.0.0
+python-multipart==0.0.29
+pytesseract==0.3.13
+pdf2image==1.17.0
+
+# Utilities
+pydantic==2.13.3
+python-dotenv==1.2.2
+
+# PostgreSQL checkpointer (optional - for LangGraph state persistence)
+# psycopg2-binary not available for Python 3.14 yet
+# Install manually when using Python 3.11/3.12: pip install psycopg2-binary

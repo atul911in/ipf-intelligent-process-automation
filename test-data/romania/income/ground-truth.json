@@ -1,0 +1,102 @@
+﻿[
+  {
+    "document_id": "RO-INC-001",
+    "document_type": "payslip",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian payslip (fluturas de salariu) - standard format",
+    "ground_truth": {
+      "employer_name": "Tech Solutions Romania S.R.L.",
+      "employer_address": "Str. Calea Victoriei Nr. 200, Sector 1, Bucuresti",
+      "employer_cui": "RO12345678",
+      "employee_name": "Alexandru Popescu",
+      "employee_cnp": "1850315400123",
+      "pay_period": "2026-03",
+      "gross_salary": "9500.00 RON",
+      "net_salary": "5820.00 RON",
+      "income_tax": "950.00 RON",
+      "cas_employee": "2375.00 RON",
+      "cass_employee": "950.00 RON",
+      "payment_date": "2026-03-25",
+      "contract_type": "contract individual de munca",
+      "position": "Inginer software"
+    },
+    "expected_confidence": "high",
+    "notes": "Standard corporate payslip, matches RO-ID-001 name and CNP"
+  },
+  {
+    "document_id": "RO-INC-002",
+    "document_type": "payslip",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian payslip - income discrepancy test",
+    "ground_truth": {
+      "employer_name": "Retail Grup S.R.L.",
+      "employer_address": "Str. Lalelelor Nr. 50, Voluntari, Jud. Ilfov",
+      "employer_cui": "RO87654321",
+      "employee_name": "Maria Ionescu-Gheorghe",
+      "employee_cnp": "2900720410234",
+      "pay_period": "2026-04",
+      "gross_salary": "5800.00 RON",
+      "net_salary": "3560.00 RON",
+      "income_tax": "580.00 RON",
+      "cas_employee": "1450.00 RON",
+      "cass_employee": "580.00 RON",
+      "payment_date": "2026-04-25",
+      "contract_type": "contract individual de munca",
+      "position": "Sef de magazin"
+    },
+    "expected_confidence": "high",
+    "notes": "Net salary 3560 RON but loan application declares 4200 RON - exceeds 10% threshold, should flag income discrepancy"
+  },
+  {
+    "document_id": "RO-INC-003",
+    "document_type": "employment_certificate",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian employment certificate (adeverinta de salariu)",
+    "ground_truth": {
+      "document_title": "Adeverinta de salariu",
+      "employer_name": "Transport Logistic Cluj S.A.",
+      "employer_address": "Str. Fabricii Nr. 20, Cluj-Napoca, Jud. Cluj",
+      "employer_cui": "RO55667788",
+      "employee_name": "Ion Dumitrescu",
+      "employee_cnp": "1780912350345",
+      "issue_date": "2026-04-01",
+      "employment_start_date": "2019-06-01",
+      "contract_type": "nedeterminat",
+      "gross_monthly_salary": "7200.00 RON",
+      "net_monthly_salary": "4420.00 RON",
+      "position": "Sef depozit",
+      "issuer_name": "Departamentul Resurse Umane",
+      "stamp_present": true
+    },
+    "expected_confidence": "medium",
+    "notes": "Scanned certificate with company stamp - tests stamp detection and multi-format income documents"
+  },
+  {
+    "document_id": "RO-INC-004",
+    "document_type": "payslip",
+    "market": "RO",
+    "language": "ro",
+    "source_description": "Romanian payslip - poor quality photo",
+    "ground_truth": {
+      "employer_name": "Constructii Timis S.R.L.",
+      "employer_address": "Bd. Revolutiei Nr. 80, Timisoara, Jud. Timis",
+      "employer_cui": "RO33445566",
+      "employee_name": "Stefan Tanase",
+      "employee_cnp": "1920225120456",
+      "pay_period": "2026-05",
+      "gross_salary": "6800.00 RON",
+      "net_salary": "4170.00 RON",
+      "income_tax": "680.00 RON",
+      "cas_employee": "1700.00 RON",
+      "cass_employee": "680.00 RON",
+      "payment_date": "2026-05-25",
+      "contract_type": "contract individual de munca",
+      "position": "Inginer constructii"
+    },
+    "expected_confidence": "low",
+    "notes": "Very poor quality mobile photo - multiple fields below 85% confidence, triggers human review"
+  }
+]

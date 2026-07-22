@@ -1,0 +1,85 @@
+﻿[
+  {
+    "document_id": "PL-ADDR-001",
+    "document_type": "utility_bill",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Polish electricity bill (faktura VAT) - PGE Polska Grupa Energetyczna",
+    "ground_truth": {
+      "provider_name": "PGE Polska Grupa Energetyczna S.A.",
+      "document_title": "Faktura VAT",
+      "invoice_number": "FV/2026/03/123456",
+      "invoice_date": "2026-03-15",
+      "customer_name": "Jan Kowalski",
+      "customer_address": "ul. Marszalkowska 10 m. 5, 00-001 Warszawa",
+      "billing_period": "2026-02-01 do 2026-02-28",
+      "amount_due": "245.67 PLN",
+      "due_date": "2026-04-01",
+      "meter_number": "E-98765432"
+    },
+    "expected_confidence": "high",
+    "notes": "Standard printed utility bill, clean layout, validates address for PL-ID-001"
+  },
+  {
+    "document_id": "PL-ADDR-002",
+    "document_type": "utility_bill",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Polish gas bill - PGNiG",
+    "ground_truth": {
+      "provider_name": "Polskie Gornictwo Naftowe i Gazownictwo S.A.",
+      "document_title": "Faktura VAT za gaz",
+      "invoice_number": "G/2026/04/789012",
+      "invoice_date": "2026-04-10",
+      "customer_name": "Anna Nowak-Wisniewska",
+      "customer_address": "ul. Dluga 22/4, 31-001 Krakow",
+      "billing_period": "2026-03-01 do 2026-03-31",
+      "amount_due": "178.34 PLN",
+      "due_date": "2026-04-25",
+      "meter_number": "G-12345678"
+    },
+    "expected_confidence": "high",
+    "notes": "Validates address for PL-ID-002"
+  },
+  {
+    "document_id": "PL-ADDR-003",
+    "document_type": "bank_statement",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Polish bank statement header - PKO Bank Polski",
+    "ground_truth": {
+      "bank_name": "PKO Bank Polski S.A.",
+      "document_title": "Wyciag z rachunku bankowego",
+      "account_number": "PL61 1020 1026 0000 0422 7020 1111",
+      "statement_date": "2026-03-31",
+      "customer_name": "Piotr Zielinski",
+      "customer_address": "ul. Morska 55, 80-001 Gdansk",
+      "statement_period": "2026-03-01 do 2026-03-31",
+      "opening_balance": "12,450.00 PLN",
+      "closing_balance": "14,230.50 PLN"
+    },
+    "expected_confidence": "high",
+    "notes": "Bank statement as proof of address, validates for PL-ID-003"
+  },
+  {
+    "document_id": "PL-ADDR-004",
+    "document_type": "utility_bill",
+    "market": "PL",
+    "language": "pl",
+    "source_description": "Polish water bill - mismatched address (deliberate test case)",
+    "ground_truth": {
+      "provider_name": "MPWiK Warszawa",
+      "document_title": "Faktura za wode i scieki",
+      "invoice_number": "W/2026/05/345678",
+      "invoice_date": "2026-05-01",
+      "customer_name": "Jan Kowalski",
+      "customer_address": "ul. Pulawska 200/15, 02-670 Warszawa",
+      "billing_period": "2026-04-01 do 2026-04-30",
+      "amount_due": "89.50 PLN",
+      "due_date": "2026-05-15",
+      "meter_number": "W-55667788"
+    },
+    "expected_confidence": "high",
+    "notes": "ADDRESS MISMATCH - customer address here differs from PL-ID-001 address. Validation should flag this discrepancy."
+  }
+]

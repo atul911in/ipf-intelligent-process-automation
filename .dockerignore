@@ -1,0 +1,12 @@
+﻿__pycache__
+*.pyc
+*.pyo
+.env
+.git
+.gitignore
+*.md
+test-data
+scripts
+docs
+node_modules
+.DS_Store
