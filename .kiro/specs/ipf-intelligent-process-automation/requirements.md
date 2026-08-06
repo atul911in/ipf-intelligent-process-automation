@@ -1,328 +1,361 @@
-# Requirements Document
+﻿# Requirements Document
 
 ## Introduction
 
-This document defines the requirements for the IPF Intelligent Process Automation programme, covering four solution areas designed to reduce IPF's cost-income ratio from ~61.9% toward the 49-51% target. The programme addresses the inherent labour intensity of the agent-led home credit model (~21,000 colleagues), the tight coupling of the FOCUS core system with branch structures, and the low ITSM maturity (2.9/5). The four solution areas are: Intelligent Loan Origination, Intelligent Agent Operations, AI Service Desk, and Intelligent Collections. All solutions must support multi-market deployment across Poland, Romania, Hungary, Spain, and the Czech Republic with full multilingual capability and GDPR compliance.
+This document defines the requirements for the IPF Intelligent Process Automation programme. The PoC phase validates the multi-agent architecture, AI-powered document processing, and NBFI decisioning engine across four European home credit markets: Poland (PL), Romania (RO), Hungary (HU), and Czech Republic (CZ).
+
+The PoC is built as a production-ready demonstration system with:
+- FastAPI backend (port 8000) with 14 REST endpoints
+- LangGraph orchestrator with 5 AI agents
+- React/Next.js UI (port 3000) with IPF branding
+- SQLite persistence with db_factory abstraction
+- 5-stage NBFI decisioning engine (Polish market)
 
 ## Glossary
 
-- **IPA_Platform**: The overarching Intelligent Process Automation platform that orchestrates the four solution areas and provides shared services (authentication, logging, monitoring, multilingual support)
-- **Loan_Origination_Engine**: The automated document verification and loan processing subsystem that uses OCR and NLP to extract and validate customer documents
-- **Agent_Operations_Optimizer**: The geospatial AI subsystem that generates optimised route plans and schedules for field agents
-- **AI_Service_Desk**: The AI-powered IT service desk subsystem that provides automated ticket triage, auto-resolution, and knowledge management
-- **Collections_Engine**: The conversational AI subsystem that automates early-stage collections via voice and SMS bots in local languages
-- **FOCUS_System**: IPF's legacy core banking and loan management system, tightly coupled with branch structures and lacking service-oriented architecture
-- **Agent**: A field-based IPF colleague who visits customers at home to originate loans and collect payments
-- **Market**: A country in which IPF operates (Poland, Romania, Hungary, Spain, Czech Republic)
-- **OCR**: Optical Character Recognition � technology to extract text from scanned documents and images
-- **NLP**: Natural Language Processing � technology to understand and extract structured information from unstructured text
-- **ITSM**: IT Service Management � the set of practices for managing IT services
-- **Escalation**: The process of routing a case from automated handling to a human agent when complexity thresholds are exceeded
-- **GDPR**: General Data Protection Regulation � EU data privacy legislation applicable across all IPF markets
-- **Credit_Assessor**: A qualified human decision-maker responsible for reviewing AI-prepared loan recommendations and making final approval or decline decisions
+- **IPA_Platform**: The Intelligent Process Automation platform orchestrating 5 AI agents
+- **Loan_Origination_Engine**: The automated document verification and loan processing subsystem
+- **Document_Agent**: OCR + LLM extraction agent for supporting documents
+- **LoanApplication_Agent**: Extracts declared fields from the loan application form
+- **Validator_Agent**: Applies market-specific field validation rules
+- **CrossReference_Agent**: Compares loan application declarations against document extractions
+- **CreditScore_Agent**: Runs the 5-stage NBFI decisioning engine
+- **Admin_Portal**: React portal at /admin for document upload
+- **Reviewer_Portal**: React portal at /reviewer for document review
+- **Assessor_Portal**: React portal at /assessor for credit decisions
+- **NBFI_Engine**: 5-stage Non-Bank Financial Institution decisioning pipeline
+- **FOCUS_System**: IPF legacy core banking system (mock in PoC)
+- **Market**: PL (Poland), RO (Romania), HU (Hungary), CZ (Czech Republic)
+- **Credit_Assessor**: Human decision-maker who records final APPROVE/DECLINE
+- **OCR**: Optical Character Recognition
+- **SQLite_DB**: Local SQLite database (data/ipf_poc.db)
+- **BIK**: Biuro Informacji Kredytowej (Polish credit bureau)
+- **BIG**: Biuro Informacji Gospodarczej (Polish debt registry)
 
 ## Requirements
 
 ### Requirement 1: Multi-Language Document Extraction
 
-**User Story:** As a loan processing team member, I want documents submitted by customers to be automatically extracted and structured regardless of language, so that manual data entry is eliminated and processing time is reduced.
+**User Story:** As a loan processing team member, I want documents submitted by customers to be automatically extracted and structured, so that manual data entry is eliminated.
 
 #### Acceptance Criteria
 
-1. WHEN a customer document image is submitted, THE Loan_Origination_Engine SHALL extract text content using OCR with a minimum accuracy of 95% for printed text
-2. WHEN extracted text is in Polish, Romanian, Hungarian, Spanish, or Czech, THE Loan_Origination_Engine SHALL identify the document language and apply language-specific NLP extraction rules
-3. WHEN a document of type identity card, proof of address, or income statement is submitted, THE Loan_Origination_Engine SHALL extract all required fields defined in the market-specific document schema
-4. IF OCR confidence for any extracted field falls below 85%, THEN THE Loan_Origination_Engine SHALL flag the field for manual review and route the document to a human operator
-5. WHEN document extraction is complete, THE Loan_Origination_Engine SHALL return structured data within 30 seconds of document submission
+1. THE Document_Agent SHALL extract text using OCR (pypdf for PDFs, pytesseract for images) with languages: pol, ron, hun, ces, eng
+2. THE Document_Agent SHALL invoke GPT-4o-mini to extract structured fields from OCR text with a confidence score (0-100) per field
+3. IF confidence < 85% for any field, THE Document_Agent SHALL flag that field for manual review
+4. THE Document_Agent SHALL return structured JSON within 30 seconds of document submission
+5. THE Document_Agent SHALL support: JPEG, PNG, PDF, TIFF formats up to 25 MB
 
 ### Requirement 2: Automated Document Verification
 
-**User Story:** As a credit assessment officer, I want submitted identity and proof documents to be automatically verified against validation rules, so that fraudulent or invalid documents are detected without manual inspection.
+**User Story:** As a credit assessment officer, I want extracted fields validated automatically, so that fraudulent or invalid documents are detected before review.
 
 #### Acceptance Criteria
 
-1. WHEN a customer identity document is extracted, THE Loan_Origination_Engine SHALL verify the document expiry date, format consistency, and cross-reference the name against the loan application
-2. WHEN a proof of address document is extracted, THE Loan_Origination_Engine SHALL verify the address matches the customer's registered address within the loan application
-3. WHEN an income document is extracted, THE Loan_Origination_Engine SHALL verify the stated income against the declared income on the loan application and flag discrepancies exceeding 10%
-4. IF document verification fails any validation rule, THEN THE Loan_Origination_Engine SHALL generate a rejection reason code and notify the submitting Agent within 60 seconds
-5. WHEN all documents for a loan application pass verification, THE Loan_Origination_Engine SHALL update the loan application status to "documents verified" in the FOCUS_System
+1. THE Validator_Agent SHALL validate: PESEL checksum (PL), CNP format (RO), rodne_cislo mod-11 (CZ), document expiry (from extracted date string), age 18+, name fuzzy match (85% threshold), income variance >10%
+2. WHEN validation fails, THE Validator_Agent SHALL set validation_status=FAIL with reason text
+3. Documents with any FAIL SHALL have status PENDING_REVIEW
 
-### Requirement 3: Human-Verified Loan Approval with AI Assistance
+### Requirement 3: Human-Verified Loan Approval
 
-**User Story:** As a credit assessor, I want the system to prepare loan applications with a recommendation and supporting data, so that I can make informed approval decisions efficiently while retaining full authority over every loan decision.
+**User Story:** As a credit assessor, I want AI to prepare a recommendation, while I make the final decision.
 
 #### Acceptance Criteria
 
-1. WHEN a loan application has status "documents verified", THE Loan_Origination_Engine SHALL generate a recommendation (approve, decline, or refer) with supporting data including credit score results, document verification outcomes, and risk indicators
-2. WHEN a recommendation is generated, THE Loan_Origination_Engine SHALL present the prepared application to a human Credit_Assessor within 3 minutes of document verification completion
-3. THE Loan_Origination_Engine SHALL route all loan applications to a human Credit_Assessor for final decision regardless of whether automated approval criteria are met
-4. THE Loan_Origination_Engine SHALL prohibit automatic approval of any loan application without explicit human Credit_Assessor confirmation
-5. WHEN a human Credit_Assessor records a final decision (approve or decline), THE Loan_Origination_Engine SHALL write the decision, the assessor's identity, reason codes, the AI-generated recommendation, and a full audit trail to the FOCUS_System via the integration layer
-6. WHEN a human Credit_Assessor has not acted on a routed application within 30 minutes, THE Loan_Origination_Engine SHALL send a reminder notification to the Credit_Assessor and escalate to the team lead after 60 minutes
+1. THE IPA_Platform SHALL never auto-approve any loan without explicit Credit_Assessor confirmation
+2. THE Assessor_Portal SHALL display AI recommendation (APPROVE/DECLINE/REFER) as advisory only
+3. WHEN an assessor records a decision, THE IPA_Platform SHALL POST to /api/decision/{application_id} with decision, assessor_id, reason_codes
+4. ALL decisions SHALL be logged in audit_log with assessor identity and timestamp
 
-### Requirement 4: Agent Route Optimisation
+### Requirement 4: 5-Stage NBFI Decisioning Engine
 
-**User Story:** As a field agent, I want my daily visit schedule to be optimised for minimal travel time, so that I can spend more time with customers and complete more visits per day.
+**User Story:** As a credit assessor, I want a decisioning engine calibrated to Polish NBFI regulatory requirements, so that decisions are explainable and auditable.
 
 #### Acceptance Criteria
 
-1. WHEN an Agent's daily schedule is generated, THE Agent_Operations_Optimizer SHALL produce a route plan that minimises total travel time using geospatial optimisation algorithms
-2. THE Agent_Operations_Optimizer SHALL factor in customer appointment windows, Agent working hours, and estimated visit duration when generating route plans
-3. WHEN a route plan is generated, THE Agent_Operations_Optimizer SHALL provide turn-by-turn navigation data compatible with the Agent's mobile application
-4. WHEN traffic or road condition data is available, THE Agent_Operations_Optimizer SHALL incorporate real-time conditions into route calculations
-5. THE Agent_Operations_Optimizer SHALL generate route plans within 60 seconds of schedule finalisation
+1. THE CreditScore_Agent SHALL implement 5 sequential stages:
+   - Stage 0: Regulatory Gateway (age, PESEL, ID expiry direct from string, AML/PEP)
+   - Stage 1: Fraud & Identity (name consistency, Open Banking simulation)
+   - Stage 2: Bureau Routing (mock BIK 1-100, mock BIG debt registry)
+   - Stage 3: Legal Caps & DTI (MPKK formula, 40%/50% DTI by income)
+   - Stage 4: Decision Matrix (product route)
+2. Stage 0 SHALL short-circuit on hard rejection — no bureau API cost incurred
+3. THE engine SHALL return stage_results with per-stage checks for UI display
+4. Expiry_date SHALL be validated from extracted string directly, not from validation record
 
-### Requirement 5: Dynamic Schedule Re-Optimisation
+### Requirement 5: React/Next.js UI with IPF Branding
 
-**User Story:** As a field agent, I want my schedule to adapt in real time when visits are cancelled or new urgent visits are added, so that my remaining time is used efficiently.
-
-#### Acceptance Criteria
-
-1. WHEN a scheduled visit is cancelled or a new visit is added during the working day, THE Agent_Operations_Optimizer SHALL recalculate the remaining route within 30 seconds
-2. WHEN re-optimisation occurs, THE Agent_Operations_Optimizer SHALL notify the Agent via push notification on the mobile application with the updated route
-3. WHILE an Agent is in transit, THE Agent_Operations_Optimizer SHALL preserve the current destination and re-optimise only subsequent visits
-4. IF re-optimisation results in a visit that cannot be completed within working hours, THEN THE Agent_Operations_Optimizer SHALL flag the visit for rescheduling and notify the branch coordinator
-
-### Requirement 6: Agent Location and Performance Tracking
-
-**User Story:** As a branch manager, I want visibility of agent locations and visit completion status, so that I can monitor operational performance and provide support when needed.
+**User Story:** As a product owner, I want the PoC to look customer-ready with IPF branding.
 
 #### Acceptance Criteria
 
-1. WHILE an Agent is on duty, THE Agent_Operations_Optimizer SHALL collect GPS location data at intervals of no more than 5 minutes with Agent consent
-2. WHEN an Agent arrives at a customer location, THE Agent_Operations_Optimizer SHALL record the arrival time and match it against the scheduled appointment
-3. THE Agent_Operations_Optimizer SHALL provide a dashboard view showing all active Agents' current locations and visit completion rates for branch managers
-4. WHEN an Agent deviates from the planned route by more than 15 minutes, THE Agent_Operations_Optimizer SHALL send an alert to the branch coordinator
+1. THE UI SHALL use Next.js 14 with Tailwind CSS at port 3000
+2. ALL portals SHALL use IPF colours: #00544E (dark teal), #7DC242 (green)
+3. THE landing page SHALL show portal hub with 3 cards
+4. ALL login screens SHALL have IPF badge and dark teal gradient
 
-### Requirement 7: AI-Powered Ticket Triage and Classification
+### Requirement 6: Admin Portal — Two-Step Document Upload
 
-**User Story:** As an IT support analyst, I want incoming service desk tickets to be automatically classified and prioritised, so that tickets reach the correct resolver group without manual sorting.
-
-#### Acceptance Criteria
-
-1. WHEN a new service desk ticket is created, THE AI_Service_Desk SHALL classify the ticket into a category and subcategory within 10 seconds of submission
-2. WHEN a ticket is classified, THE AI_Service_Desk SHALL assign a priority level (Critical, High, Medium, Low) based on impact and urgency assessment from the ticket content
-3. WHEN a ticket is classified and prioritised, THE AI_Service_Desk SHALL route the ticket to the appropriate resolver group based on category mapping rules
-4. THE AI_Service_Desk SHALL achieve a classification accuracy of at least 90% measured against human-assigned categories over a rolling 30-day window
-5. WHEN a ticket is submitted in Polish, Romanian, Hungarian, Spanish, Czech, or English, THE AI_Service_Desk SHALL process and classify the ticket in the original language
-
-### Requirement 8: Automated Ticket Resolution
-
-**User Story:** As an IT end user, I want common IT issues to be resolved automatically without waiting for a human analyst, so that I can return to productive work faster.
+**User Story:** As a back-office administrator, I want to upload the loan application form and supporting documents separately.
 
 #### Acceptance Criteria
 
-1. WHEN a ticket matches a known resolution pattern with confidence above 90%, THE AI_Service_Desk SHALL execute the automated resolution workflow and notify the requester
-2. WHEN an automated resolution is applied, THE AI_Service_Desk SHALL request confirmation from the requester that the issue is resolved within 24 hours
-3. IF the requester confirms the issue is not resolved, THEN THE AI_Service_Desk SHALL escalate the ticket to a human analyst with the attempted resolution details attached
-4. IF no automated resolution pattern matches with confidence above 90%, THEN THE AI_Service_Desk SHALL route the ticket to a human analyst without delay
-5. THE AI_Service_Desk SHALL log all automated resolution attempts and outcomes for continuous improvement analysis
+1. THE Admin_Portal SHALL present Step 1 for loan_application document upload
+2. THE Admin_Portal SHALL present Step 2 for multiple supporting documents with per-file type selector
+3. WHEN submitted, THE Admin_Portal SHALL POST to /api/upload with all files
+4. THE Admin_Portal SHALL provide Upload History and Processing Status pages
 
-### Requirement 9: Knowledge Management and Self-Service
+### Requirement 7: Reviewer Portal — Application Review
 
-**User Story:** As an IT end user, I want to search a knowledge base for solutions before raising a ticket, so that I can resolve common issues independently.
-
-#### Acceptance Criteria
-
-1. WHEN a user submits a search query, THE AI_Service_Desk SHALL return relevant knowledge articles ranked by relevance within 5 seconds
-2. WHEN a user begins creating a ticket, THE AI_Service_Desk SHALL suggest relevant knowledge articles based on the ticket description before submission
-3. THE AI_Service_Desk SHALL support knowledge article search and display in Polish, Romanian, Hungarian, Spanish, Czech, and English
-4. WHEN an automated resolution is successful, THE AI_Service_Desk SHALL create or update a knowledge article documenting the resolution steps
-5. THE AI_Service_Desk SHALL track knowledge article usage and surface the most effective articles for each ticket category
-
-### Requirement 10: Automated Early-Stage Collections Contact
-
-**User Story:** As a collections manager, I want early-stage overdue accounts to be contacted automatically via voice and SMS bots, so that human agents focus only on complex cases requiring negotiation.
+**User Story:** As a reviewer, I want to see loan application, supporting documents, and discrepancies in one view.
 
 #### Acceptance Criteria
 
-1. WHEN a customer account reaches 1 day past due, THE Collections_Engine SHALL initiate an automated contact sequence via SMS in the customer's registered language
-2. WHEN a customer account reaches 7 days past due without payment or arrangement, THE Collections_Engine SHALL initiate an automated voice call in the customer's registered language
-3. THE Collections_Engine SHALL support automated conversations in Polish, Romanian, Hungarian, Spanish, and Czech with natural-sounding speech synthesis
-4. WHEN a customer responds to an automated contact and agrees to a payment arrangement, THE Collections_Engine SHALL record the arrangement and update the account status in the FOCUS_System
-5. WHEN an automated voice conversation detects customer distress, dispute, or complex negotiation need, THE Collections_Engine SHALL transfer the call to a human collections agent within 30 seconds
+1. THE Reviewer_Portal Application Review tab SHALL display 3 panels:
+   - Panel A: Document Preview (LEFT) + Declared Fields (RIGHT)
+   - Panel B: Supporting documents with expandable OCR extractions
+   - Panel C: Cross-reference discrepancy report
+2. EACH document SHALL have a Review Document button navigating to document review with correct document_id
+3. THE Review Document page SHALL show: Confidence Summary (3 tiles), document preview, extracted fields, Approve/Reject buttons
 
-### Requirement 11: Collections Escalation and Handoff
+### Requirement 8: VERIFIED Status Persistence
 
-**User Story:** As a collections agent, I want to receive full context when a case is escalated from automated handling, so that I can continue the conversation without asking the customer to repeat information.
-
-#### Acceptance Criteria
-
-1. WHEN a collections case is escalated to a human Agent, THE Collections_Engine SHALL provide the complete interaction history including transcripts, payment history, and previous arrangements
-2. WHEN escalation occurs during a live voice call, THE Collections_Engine SHALL perform a warm transfer providing the human Agent with a real-time summary before connecting
-3. IF a customer has not responded to 3 automated contact attempts across SMS and voice channels, THEN THE Collections_Engine SHALL escalate the account to a human Agent for direct follow-up
-4. WHEN a case is escalated, THE Collections_Engine SHALL assign a priority score based on days past due, outstanding balance, and customer risk profile
-
-### Requirement 12: FOCUS System Integration
-
-**User Story:** As a systems architect, I want all automation solutions to integrate with the FOCUS core system through a standardised integration layer, so that data consistency is maintained and integration costs are manageable.
+**User Story:** As a reviewer, I want documents I approve to remain verified after AI re-runs.
 
 #### Acceptance Criteria
 
-1. THE IPA_Platform SHALL communicate with the FOCUS_System exclusively through a defined integration layer that abstracts the underlying system coupling
-2. WHEN any automation component writes data to the FOCUS_System, THE IPA_Platform SHALL validate the data against the FOCUS_System schema before submission
-3. IF the FOCUS_System is unavailable, THEN THE IPA_Platform SHALL queue transactions and retry with exponential backoff until the system is available, notifying operations staff after 5 failed attempts
-4. THE IPA_Platform SHALL maintain an audit log of all data exchanges with the FOCUS_System including timestamps, payload summaries, and outcome status
-5. WHEN a new Market is onboarded, THE IPA_Platform SHALL support market-specific FOCUS_System configuration without requiring changes to the integration layer code
+1. THE Orchestrator validate_extractions step SHALL check document status before updating
+2. IF status == VERIFIED, THE Orchestrator SHALL skip that document (continue)
+3. Only reviewer Approve/Reject SHALL set or change VERIFIED status
 
-### Requirement 13: Data Privacy and GDPR Compliance
+### Requirement 9: Cross-Reference Discrepancy Detection
 
-**User Story:** As a data protection officer, I want all automation components to enforce GDPR requirements, so that customer data is processed lawfully and IPF maintains regulatory compliance across all EU markets.
+**User Story:** As a compliance officer, I want automatic comparison of loan application declarations against supporting documents.
 
 #### Acceptance Criteria
 
-1. THE IPA_Platform SHALL process customer personal data only for the specific purpose declared at the point of collection, with a documented legal basis for each processing activity
-2. WHEN a customer exercises a data access request, THE IPA_Platform SHALL provide all personal data held across automation components within 30 days
-3. WHEN a customer exercises a data deletion request, THE IPA_Platform SHALL delete or anonymise personal data across all automation components within 30 days, except where legal retention obligations apply
-4. THE IPA_Platform SHALL encrypt all customer personal data at rest using AES-256 and in transit using TLS 1.2 or higher
-5. WHEN personal data is processed by any automation component, THE IPA_Platform SHALL log the processing activity including purpose, legal basis, data categories, and retention period
-6. THE IPA_Platform SHALL enforce data residency requirements by storing and processing personal data within the EU region
+1. THE CrossReference_Agent SHALL compare: name, DOB, address, income, bank_account
+2. EACH comparison SHALL produce: status (MATCH/MISMATCH/WARNING/UNVERIFIABLE), severity (HIGH/MEDIUM/LOW)
+3. Discrepancies SHALL be accessible via GET /api/discrepancies/{application_id}
+4. Reviewers SHALL be able to override discrepancies with explanation text
 
-### Requirement 14: Multi-Market Deployment and Configuration
+### Requirement 10: Consolidated Application Review
 
-**User Story:** As a programme manager, I want to deploy automation solutions to new markets using configuration rather than code changes, so that market rollout timelines are predictable and efficient.
+**User Story:** As a credit assessor, I want a single view showing all relevant information.
 
 #### Acceptance Criteria
 
-1. THE IPA_Platform SHALL support market-specific configuration including language, currency, regulatory rules, and business thresholds without code modifications
-2. WHEN a new Market is onboarded, THE IPA_Platform SHALL allow market-specific document templates, validation rules, and workflow parameters to be configured through an administration interface
-3. THE IPA_Platform SHALL support concurrent operation across multiple Markets with complete data isolation between Markets
-4. WHEN a configuration change is applied to a Market, THE IPA_Platform SHALL apply the change without affecting other Markets' operations
-5. THE IPA_Platform SHALL support phased rollout by enabling or disabling individual solution areas per Market independently
+1. THE Reviewer_Portal Application Review tab SHALL show summary metrics (doc count, verified, mismatches, high risk)
+2. Panel A SHALL show loan application with document preview on left and declared fields on right
+3. Panel C SHALL show discrepancy report with severity indicators and override capability
 
-### Requirement 15: Monitoring, Observability, and Reporting
+### Requirement 11: Document Upload Portal (Admin)
 
-**User Story:** As an operations manager, I want unified monitoring and reporting across all automation components, so that I can track programme benefits realisation and identify operational issues proactively.
+**User Story:** As a back-office administrator, I want a web interface for document upload.
 
 #### Acceptance Criteria
 
-1. THE IPA_Platform SHALL provide a unified dashboard showing key performance indicators for each solution area across all Markets
-2. WHEN any automation component experiences an error rate exceeding 5% over a 15-minute window, THE IPA_Platform SHALL raise an alert to the operations team
-3. THE IPA_Platform SHALL record processing volumes, success rates, processing times, and exception rates for each automation component
-4. THE IPA_Platform SHALL generate monthly benefits realisation reports showing cost savings, processing time reductions, and automation rates against baseline measurements
-5. WHEN an automation component's response time exceeds the defined threshold for that component, THE IPA_Platform SHALL log a performance warning and notify the operations team
+1. THE Admin_Portal SHALL require password authentication (ADMIN_PASSWORD env var)
+2. THE Admin_Portal SHALL support batch upload up to 20 files, 25 MB each
+3. Document types SHALL be market-specific dropdowns (PL: identity_card, proof_of_address, income_proof, bank_statement; RO/HU/CZ variants)
+4. THE Admin_Portal SHALL show Upload History via GET /api/upload/history
 
-### Requirement 16: Multi-Agent AI Architecture
+### Requirement 12: Event-Driven Processing Trigger
 
-**User Story:** As a solutions architect, I want the IPA platform to be built as a coordinated system of purpose-built AI agents with clear decision boundaries, so that each agent can be developed, tested, deployed, and scaled independently while maintaining system-wide governance.
-
-#### Acceptance Criteria
-
-1. THE IPA_Platform SHALL implement a multi-agent architecture with dedicated AI agents for document processing, route optimisation, collections contact, service desk operations, and reconciliation
-2. THE IPA_Platform SHALL provide an orchestrator service that coordinates agent-to-agent communication, manages workflow state, and enforces execution order based on defined dependency graphs
-3. WHEN any AI agent produces a decision or recommendation, THE IPA_Platform SHALL route that output through a shared policy gate middleware that validates the action against market-specific rules before execution
-4. THE IPA_Platform SHALL maintain each AI agent as a stateless decision service with workflow state owned by the orchestrator, enabling independent scaling and deployment of individual agents
-5. WHEN a new AI agent is added to the platform, THE IPA_Platform SHALL allow registration and integration without requiring changes to existing agents or the orchestrator core logic
-6. THE IPA_Platform SHALL log every agent invocation, tool call, and decision with full traceability including inputs, outputs, policy version applied, and execution timestamp
-
-### Requirement 17: Technology Portability and Cloud Agnosticism
-
-**User Story:** As a technology director, I want the IPA platform architecture to support deployment on multiple cloud providers or technology stacks without fundamental redesign, so that the organisation retains strategic flexibility and avoids vendor lock-in on the AI layer.
+**User Story:** As a platform engineer, I want uploads to trigger processing automatically.
 
 #### Acceptance Criteria
 
-1. THE IPA_Platform SHALL abstract LLM provider dependencies behind a model interface layer that allows switching between providers (OpenAI, Anthropic, AWS Bedrock, Google Vertex) without changes to agent logic
-2. THE IPA_Platform SHALL support two validated technology stacks: an AWS-native stack (Step Functions, Bedrock, Textract, Connect, SageMaker) and a cloud-agnostic stack (LangGraph, open-source tools, Kubernetes)
-3. THE IPA_Platform SHALL store all domain data in provider-neutral formats and storage systems (Snowflake, PostgreSQL) that are portable across cloud environments
-4. WHEN a technology stack decision is made for a market deployment, THE IPA_Platform SHALL deploy using infrastructure-as-code templates specific to the chosen stack without requiring application code changes
-5. THE IPA_Platform SHALL ensure that the policy gate, audit logging, and data residency controls function identically regardless of the underlying technology stack
+1. WHEN upload succeeds, THE IPA_Platform SHALL launch LangGraph workflow in daemon thread within 5 seconds
+2. THE upload HTTP response SHALL return immediately (not blocked by processing)
+3. IF workflow fails, THE IPA_Platform SHALL set status FAILED and log traceback to audit_log
 
-### Requirement 18: AI Agent Policy Governance and Conduct Controls
+### Requirement 13: Data Persistence (SQLite)
 
-**User Story:** As a compliance officer, I want every AI agent action to be governed by versioned, market-specific policy rules with mandatory human escalation paths, so that the platform operates within regulatory boundaries across all markets and no agent can take actions beyond its defined authority.
+**User Story:** As a developer, I want all data in SQLite with clean factory abstraction.
 
 #### Acceptance Criteria
 
-1. THE IPA_Platform SHALL maintain a versioned policy catalogue containing market-specific rules for contact windows, frequency caps, treatment envelopes, vulnerability screening, and conduct requirements
-2. WHEN any AI agent attempts an action, THE policy gate SHALL validate the action against the applicable policy version and either permit, block, or escalate based on the rule outcome
-3. IF a vulnerability signal is detected during any customer interaction (voice, SMS, or digital), THEN THE IPA_Platform SHALL immediately halt automated treatment and transfer to a trained human agent
-4. THE IPA_Platform SHALL record which policy version governed each decision, enabling retrospective audit and regulatory evidence production
-5. WHEN policy rules are updated for a market, THE IPA_Platform SHALL apply the new version to future decisions without requiring agent redeployment, while maintaining an immutable record of historical policy versions
-6. THE IPA_Platform SHALL support champion/challenger experimentation at the branch or cell level, with pre-registered metrics and complaint-rate thresholds that trigger automatic rollback if exceeded
+1. THE db_factory.py SHALL return SQLiteDatabase when USE_SQLITE=true
+2. ALL data SHALL persist in: documents, extractions, workflow_state, loan_applications, discrepancies, decisions, audit_log, file_storage
+3. File BLOBs SHALL be stored in file_storage table
+4. THE config.py SHALL load .env via load_dotenv() at import time to ensure OPENAI_API_KEY availability
 
-### Requirement 19: Mock Credit Scoring (PoC Phase)
+### Requirement 14: Mock Credit Scoring
 
-**User Story:** As a credit assessor, I want to see a bureau-style credit score derived from extracted document data across all four PoC markets, so that I can assess financial risk before making a final loan decision.
+**User Story:** As a credit assessor, I want a bureau-style credit score from extracted data.
 
 #### Acceptance Criteria
 
-1. THE IPA_Platform SHALL compute a mock credit score on a 0-1000 point scale using five weighted factors: Income Adequacy (300pts), Employment Stability (200pts), Identity Validity (200pts), Document Consistency (200pts), and Age and Eligibility (100pts)
-2. THE IPA_Platform SHALL classify scores into five risk bands: EXCELLENT (800-1000), GOOD (650-799), FAIR (500-649), POOR (350-499), HIGH RISK (0-349)
-3. THE IPA_Platform SHALL apply market-specific income thresholds: 2,500 PLN for Poland, 1,500 RON for Romania, 150,000 HUF for Hungary, and 20,000 CZK for Czech Republic
-4. THE IPA_Platform SHALL reference the appropriate national credit bureau name in all score outputs: BIK for Poland, Biroul de Credit for Romania, BISZ/KHR for Hungary, and CBCB for Czech Republic
-5. ALL credit score outputs SHALL include the disclaimer that the score is a mock simulation and must be replaced with live bureau API integration in production
-6. THE IPA_Platform SHALL expose credit scores via a dedicated REST endpoint that returns the score, risk band, per-factor breakdown, risk flags, and scoring recommendation alongside the AI document recommendation in the Credit Assessor decision screen
+1. THE CreditScore_Agent SHALL return: score (0-1000), risk_band, recommendation, breakdown per factor, flags, bureau_name, product_route
+2. Risk bands: EXCELLENT (800-1000), GOOD (650-799), FAIR (500-649), POOR (350-499), HIGH RISK (0-349) — superseded by NBFI engine 5-stage route
+3. Bureau names: BIK (Mock) for PL, Biroul de Credit (Mock) for RO, BISZ/KHR (Mock) for HU, CBCB (Mock) for CZ
+4. ALL outputs SHALL include mock disclaimer
 
-### Requirement 20: Observability and Tracing
+### Requirement 15: PDF Document Preview
 
-**User Story:** As a platform engineer, I want all AI agent invocations to be traced in an observability platform, so that I can inspect agent reasoning, debug failures, and monitor performance across the processing pipeline.
+**User Story:** As a document reviewer, I want to see rendered PDF previews inline.
 
 #### Acceptance Criteria
 
-1. THE IPA_Platform SHALL integrate with LangSmith for tracing all LangChain and LangGraph operations when LANGCHAIN_TRACING_V2, LANGCHAIN_API_KEY, and LANGCHAIN_PROJECT environment variables are present
-2. WHEN tracing is active, THE IPA_Platform SHALL record a trace for every orchestrator workflow run capturing each graph node as a distinct span with inputs, outputs, and latency
-3. WHEN tracing is active, THE IPA_Platform SHALL record every LLM call with prompt, completion, model name, token counts, and latency
-4. THE IPA_Platform SHALL operate normally without tracing when LangSmith credentials are not configured
+1. GET /api/document/{document_id}/preview SHALL return PNG of PDF first page
+2. Primary method: pdf2image at 150 DPI
+3. Fallback: pypdf text + Pillow canvas render
+4. Non-PDF images SHALL be returned directly
 
-### Requirement 21: Loan Application Form as Reference Document
+### Requirement 16: Audit Trail
 
-**User Story:** As a loan origination officer, I want the customer's completed loan application form to be uploaded and extracted alongside supporting documents, so that all declared information is captured as the authoritative reference for cross-verification.
-
-#### Acceptance Criteria
-
-1. THE Loan_Origination_Engine SHALL accept a loan application form as a distinct document type (loan_application) in addition to identity, address, and income supporting documents
-2. WHEN a loan application document is extracted, THE Loan_Origination_Engine SHALL capture all declared fields including applicant name, date of birth, residential address, declared income, requested loan amount, loan term, employment status, and bank account details
-3. THE extracted loan application data SHALL be stored as the reference dataset for the application and SHALL be accessible to all downstream agents for cross-verification
-
-### Requirement 22: Automated Cross-Reference and Discrepancy Detection
-
-**User Story:** As a compliance officer, I want the system to automatically detect inconsistencies between what a customer declared on their loan application and the evidence provided in supporting documents, so that fraud indicators and data quality issues are surfaced before human review.
+**User Story:** As a compliance officer, I want every action logged immutably.
 
 #### Acceptance Criteria
 
-1. WHEN all documents for a loan application are extracted, THE Loan_Origination_Engine SHALL automatically compare declared loan application fields against corresponding fields in supporting documents
-2. THE cross-reference SHALL cover: applicant name (identity document), date of birth (identity document), residential address (proof of address), net income (income document), and bank account number (bank statement)
-3. FOR each comparison, THE Loan_Origination_Engine SHALL classify the result as MATCH, WARNING (partial match within tolerance), MISMATCH, or UNVERIFIABLE and assign severity: HIGH for identity mismatches, MEDIUM for address mismatches, and LOW for minor financial variances
-4. IF any HIGH severity discrepancy is detected, THE Loan_Origination_Engine SHALL escalate the application to a senior credit assessor and flag it prominently in the review queue
+1. THE audit_log SHALL capture all events: UPLOAD, EXTRACT_LOAN_APP, EXTRACT, CROSS_REFERENCE, PAUSE_FOR_REVIEW, CORRECT, CONFIRM, RECOMMEND, APPROVE, DECLINE, WORKFLOW_FAILED, DISCREPANCY_OVERRIDE
+2. EACH event SHALL include: action, actor, application_id, document_id, timestamp, details JSON
+3. THE Reviewer_Portal SHALL display audit events with processing flow diagram
 
-### Requirement 23: Consolidated Application Review Interface
+### Requirement 17: Loan Application Form Upload
 
-**User Story:** As a credit assessor, I want a single review screen that shows the loan application, all supporting documents, and a cross-reference discrepancy report side by side, so that I can make an informed approval decision without navigating multiple screens.
-
-#### Acceptance Criteria
-
-1. THE review interface SHALL present three integrated panels: loan application declared fields, supporting document extractions with confidence scores, and a cross-reference discrepancy report
-2. EACH discrepancy SHALL show the declared value, extracted value, mismatch severity, and a field for the reviewer to record an override explanation
-3. WHEN a reviewer overrides a discrepancy, THE system SHALL log the override with reviewer identity, timestamp, and justification in the audit trail
-
-### Requirement 24: Credit Assessor Decision Portal
-
-**User Story:** As a credit assessor, I want a dedicated portal separate from the document reviewer interface, showing only the information I need to make credit decisions, so that my workflow is clean and focused without distracting technical details.
+**User Story:** As an administrator, I want the loan application form extracted as the reference document.
 
 #### Acceptance Criteria
 
-1. THE Credit_Assessor portal SHALL be a separate Streamlit application served on port 8503, accessible only to users with the credit assessor password
-2. THE portal SHALL provide four pages: Decision Queue (applications awaiting decision), Application Summary (one-page overview), Loan Decision (approve/decline), and Decision History
-3. THE Application Summary page SHALL display: applicant declared details, credit score gauge with risk band, score breakdown by factor, and risk flags with human-readable explanation text for each flag
-4. THE Loan Decision page SHALL require the assessor to select reason codes before declining a loan; approvals SHALL record the assessor ID, timestamp, and any notes
-5. THE portal SHALL NOT display raw OCR confidence scores, field extraction details, or document correction controls — these are the domain of the Document Reviewer portal
+1. THE Admin_Portal SHALL provide Step 1 dedicated to loan_application document
+2. THE LoanApplication_Agent SHALL extract 11 declared fields
+3. Extracted fields SHALL be stored and accessible via GET /api/loan-application/{application_id}
 
-### Requirement 25: Risk Flag Explanations
+### Requirement 18: Cross-Reference Agent
 
-**User Story:** As a credit assessor, I want each detected risk flag to include a plain-language explanation of what the flag means and why it matters, so that I can make an informed decision without needing to interpret technical output.
+**User Story:** As a compliance officer, I want automated detection of inconsistencies.
 
 #### Acceptance Criteria
 
-1. FOR each risk flag produced by the Credit_Score_Agent, THE system SHALL display an explanation covering: what the flag detected, why it is a concern for lending, and what action the assessor should consider
-2. THE explanations SHALL be tailored to the flag type: income discrepancy, expired document, address mismatch, name inconsistency, employment not verified, and age outside eligible range
-3. THE explanations SHALL be displayed as expandable panels beneath each flag, collapsed by default to avoid cluttering the decision screen
+1. THE CrossReference_Agent SHALL run after all documents are extracted
+2. Results SHALL include: field_pair, declared_value, extracted_value, status, severity, detail
+3. Reviewers SHALL be able to override with explanation text logged to audit
 
-### Requirement 26: Audit Trail Visualisation
+### Requirement 19: Mock Credit Scoring (NBFI v2)
 
-**User Story:** As a document reviewer, I want to see both the raw event log and a visual pipeline flowchart in the audit trail, so that I can quickly understand where an application is in the processing pipeline and what events have occurred.
+**User Story:** As a credit assessor, I want a bureau-style score with NBFI decisioning.
 
 #### Acceptance Criteria
 
-1. THE Audit Trail page SHALL display a two-column layout: event log on the left, processing pipeline flowchart on the right
-2. THE pipeline flowchart SHALL show all defined processing stages as circular nodes connected by vertical lines, colour-coded as: red (not started), amber (currently processing), green (completed)
-3. THE pipeline SHALL include stages: Documents Uploaded, Loan App Extracted, Documents Extracted, Cross-Reference Check, Pending Review, Field Corrections, Document Confirmed, AI Recommendation, Loan Approved/Declined
+1. THE CreditScore_Agent SHALL use 5-stage NBFI pipeline (replaces simple scoring model)
+2. Stage results SHALL be returned in stage_results array for UI accordion display
+3. Product routes SHALL map to BIK bands: Prime, Mid-Market, Subprime, Thin File
+4. Expiry date validation SHALL use extracted string directly
+
+### Requirement 20: Observability
+
+**User Story:** As a platform engineer, I want agent tracing via LangSmith.
+
+#### Acceptance Criteria
+
+1. THE IPA_Platform SHALL enable LangSmith tracing when LANGCHAIN_TRACING_V2, LANGCHAIN_API_KEY, LANGCHAIN_PROJECT are set
+2. THE IPA_Platform SHALL operate normally without LangSmith credentials
+
+### Requirement 21: Loan Application as Reference Document
+
+**User Story:** As a reviewer, I want the loan application to be the authoritative reference.
+
+#### Acceptance Criteria
+
+1. THE LoanApplication_Agent SHALL extract: applicant_full_name, date_of_birth, residential_address, declared_net_monthly_income, declared_income_currency, requested_loan_amount, loan_term_weeks, employment_status, employer_name, bank_account_number, purpose_of_loan
+2. Fields SHALL be stored via save_loan_application() and accessible via GET /api/loan-application/{id}
+
+### Requirement 22: Discrepancy Detection
+
+**User Story:** As a compliance officer, I want automatic cross-reference checking.
+
+#### Acceptance Criteria
+
+1. Discrepancy statuses: MATCH, MISMATCH (RED), WARNING (AMBER), UNVERIFIABLE (GREY)
+2. Severity: HIGH for name/identity, MEDIUM for address, LOW for financial variance
+3. HIGH severity triggers prominent display in Reviewer Portal Panel C
+
+### Requirement 23: Consolidated Review Interface
+
+**User Story:** As a reviewer, I want one screen with loan app, supporting docs, and discrepancies.
+
+#### Acceptance Criteria
+
+1. Panel A: Document Preview (left) + Declared Fields (right) — swapped from original implementation
+2. Panel B: Supporting docs with Review Document button per doc
+3. Panel C: Discrepancy report with override form
+
+### Requirement 24: Credit Assessor Portal (React)
+
+**User Story:** As an assessor, I want a dedicated portal for credit decisions.
+
+#### Acceptance Criteria
+
+1. THE Assessor_Portal SHALL provide: Decision Queue, Application Summary, Loan Decision, Decision History tabs
+2. THE Application Summary SHALL show 5-stage NBFI engine as expandable accordion
+3. THE Loan Decision tab SHALL provide APPROVE/DECLINE buttons with reason codes
+
+### Requirement 25: IPF Branding
+
+**User Story:** As a product owner, I want IPF brand identity across all portals.
+
+#### Acceptance Criteria
+
+1. Primary: #00544E (dark teal), Accent: #7DC242 (green)
+2. IPF logo badge on all login screens
+3. Dark teal gradient headers on all portals
+4. Green approve states, teal primary buttons
+
+### Requirement 26: NBFI 5-Stage Engine (React UI Display)
+
+**User Story:** As an assessor, I want the 5-stage engine results visible in the UI.
+
+#### Acceptance Criteria
+
+1. THE Assessor_Portal Application Summary SHALL show DecisioningStagesDisplay component
+2. EACH stage SHALL be expandable showing: stage name, description, pass/fail, rejection reason, per-rule checks
+3. Stage 0 blocking SHALL show which rule caused rejection
+4. All 5 stages passing SHALL show PASS badges with product route
+
+### Requirement 27: Document Review Buttons
+
+**User Story:** As a reviewer, I want direct access to document review from application review.
+
+#### Acceptance Criteria
+
+1. THE Reviewer_Portal Panel A SHALL have Review This Document button under loan app preview
+2. THE Reviewer_Portal Panel B SHALL have Review Document button on each supporting doc row
+3. CLICKING Review Document SHALL navigate to Review Document tab with correct document_id pre-loaded
+4. THE Review Document tab SHALL show Approve Document (teal) and Reject Document (red) buttons
+
+### Requirement 28: Confidence Summary
+
+**User Story:** As a reviewer, I want a confidence overview before reviewing fields.
+
+#### Acceptance Criteria
+
+1. THE Review Document page SHALL show 3 tiles: High (85%+), Medium (70-84%), Low (<70%)
+2. EACH tile SHALL show count of fields in that band
+3. Low-confidence fields SHALL be highlighted in the field list
+
+### Requirement 29: Deployment Readiness
+
+**User Story:** As an IT engineer, I want the PoC to be deployable to a shared environment.
+
+#### Acceptance Criteria
+
+1. THE backend SHALL be startable via: uvicorn src.backend.api.main:app --port 8000
+2. THE React UI SHALL be buildable via: npm run build (no TypeScript errors)
+3. THE .env SHALL be excluded from git via .gitignore
+4. THE .env.example SHALL document all required variables
+5. Deployment options: Railway (backend) + Vercel (UI)
+
+### Requirement 30: Test Data Library
+
+**User Story:** As a demo presenter, I want pre-built test cases to demonstrate different outcomes.
+
+#### Acceptance Criteria
+
+1. THE test-data/demo-cases/generated/ folder SHALL contain 4 complete test cases
+2. DEMO-PL-BAD-001: Karolina Mazurek — expired ID, expect DECLINE at Stage 0
+3. DEMO-PL-GOOD-001: Tomasz Wisnewski — all clean, expect APPROVE
+4. DEMO-PL-PRIME-001: Piotr Nowak — Prime BIK, 5500 PLN income, expect APPROVE & UPSELL with all 5 stages visible
+5. DEMO-PL-PRIME-002: Anna Wojcik — Mid-market BIK, 4200 PLN income, expect APPROVE STANDARD with all 5 stages visible
+6. EACH test case SHALL have 5 PDFs: loan_application, dowod_osobisty, pasek_wynagrodzen, faktura_adresowa, wyciag_bankowy

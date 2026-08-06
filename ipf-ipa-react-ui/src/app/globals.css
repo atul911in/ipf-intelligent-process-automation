@@ -1,0 +1,26 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ipf-dark:    #00544E;
+  --ipf-mid:     #006E66;
+  --ipf-light:   #008C82;
+  --ipf-green:   #7DC242;
+  --ipf-green-d: #5A9A28;
+  --ipf-bg:      #F4F7F6;
+  --ipf-card:    #FFFFFF;
+  --ipf-text:    #1A2E2A;
+  --ipf-muted:   #5A7570;
+  --ipf-border:  #D1E0DD;
+}
+
+body {
+  background-color: var(--ipf-bg);
+  color: var(--ipf-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.ipf-header {
+  background: linear-gradient(135deg, #00544E 0%, #006E66 60%, #008C82 100%);
+}

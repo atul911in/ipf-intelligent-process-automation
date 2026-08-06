@@ -159,6 +159,11 @@ def validate_extractions(state: WorkflowState) -> dict:
             or v["confidence"] < settings.CONFIDENCE_THRESHOLD
             for v in doc_validations
         )
+        # Do NOT overwrite VERIFIED - respect human reviewer decisions
+        all_batch_docs = _db.get_documents_by_batch(state["batch_id"])
+        current_doc = next((d for d in all_batch_docs if d["id"] == doc_id), None)
+        if current_doc and current_doc.get("status") == "VERIFIED":
+            continue  # Already verified by reviewer - do not reset
         _db.update_document_status(doc_id, "PENDING_REVIEW" if needs_review else "VERIFIED")
 
     return {"validations": all_validations, "fields_needing_review": fields_needing_review}

@@ -4,6 +4,16 @@ Environment variables and settings.
 """
 import os
 from dataclasses import dataclass
+from pathlib import Path
+
+# Load .env file explicitly - find it relative to this file
+_env_path = Path(__file__).parent.parent.parent.parent / ".env"
+if _env_path.exists():
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(dotenv_path=_env_path, override=False)
+    except ImportError:
+        pass
 
 @dataclass
 class Settings:

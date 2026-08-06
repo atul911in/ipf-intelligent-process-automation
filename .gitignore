@@ -69,3 +69,6 @@ logs/
 # NODE (if any)
 # ============================================================
 node_modules/
+
+# Office temp lock files
+~$*
